@@ -12,6 +12,7 @@ _RequestCreator _$RequestCreatorFromJson(Map<String, dynamic> json) =>
       fullName: json['full_name'] as String,
       avatarUrl: json['avatar_url'] as String?,
       medal: $enumDecodeNullable(_$MedalEnumMap, json['medal']) ?? Medal.hierro,
+      whatsappNumber: json['whatsapp_number'] as String?,
     );
 
 Map<String, dynamic> _$RequestCreatorToJson(_RequestCreator instance) =>
@@ -20,6 +21,7 @@ Map<String, dynamic> _$RequestCreatorToJson(_RequestCreator instance) =>
       'full_name': instance.fullName,
       'avatar_url': instance.avatarUrl,
       'medal': _$MedalEnumMap[instance.medal]!,
+      'whatsapp_number': instance.whatsappNumber,
     };
 
 const _$MedalEnumMap = {

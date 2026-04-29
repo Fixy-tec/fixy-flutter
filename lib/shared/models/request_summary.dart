@@ -18,6 +18,7 @@ abstract class RequestCreator with _$RequestCreator {
     required String fullName,
     String? avatarUrl,
     @Default(Medal.hierro) Medal medal,
+    String? whatsappNumber,
   }) = _RequestCreator;
 
   factory RequestCreator.fromJson(Map<String, dynamic> json) =>

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../shared/models/application_summary.dart';
 import '../../../../shared/models/request_summary.dart';
@@ -98,8 +99,11 @@ class _ApplicationCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isApproved = item.status == ApplicationStatus.aprobada;
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push('/requests/${item.requestId}'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -137,6 +141,7 @@ class _ApplicationCard extends StatelessWidget {
               ),
             ],
           ],
+        ),
         ),
       ),
     );
@@ -179,8 +184,11 @@ class _CreatedCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push('/requests/${request.id}'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -216,6 +224,7 @@ class _CreatedCard extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
@@ -278,7 +287,10 @@ class _SimpleRequestList extends StatelessWidget {
             padding: const EdgeInsets.all(16),
             itemCount: items.length,
             separatorBuilder: (context, i) => const SizedBox(height: 12),
-            itemBuilder: (context, i) => RequestCard(request: items[i]),
+            itemBuilder: (context, i) => RequestCard(
+              request: items[i],
+              onTap: () => context.push('/requests/${items[i].id}'),
+            ),
           );
         },
       ),

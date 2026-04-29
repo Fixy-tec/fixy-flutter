@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../auth/presentation/providers/auth_providers.dart';
+import '../widgets/whatsapp_editor_sheet.dart';
 
 class ProfilePage extends ConsumerWidget {
   const ProfilePage({super.key});
@@ -64,6 +65,21 @@ class ProfilePage extends ConsumerWidget {
                 value: user.ratingsCount == 0
                     ? '—'
                     : '${user.avgRating.toStringAsFixed(2)} (${user.ratingsCount})',
+              ),
+              const SizedBox(height: 16),
+              Card(
+                child: ListTile(
+                  leading: const Icon(Icons.phone),
+                  title: const Text('WhatsApp'),
+                  subtitle: Text(
+                    user.whatsappNumber ?? 'No configurado',
+                  ),
+                  trailing: const Icon(Icons.edit_outlined),
+                  onTap: () => WhatsappEditorSheet.show(
+                    context,
+                    user.whatsappNumber,
+                  ),
+                ),
               ),
               const SizedBox(height: 24),
               Text(

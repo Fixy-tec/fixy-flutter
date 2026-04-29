@@ -13,7 +13,7 @@ class FeedRepository {
   static const _selectQuery = '''
     id, type, title, description, difficulty_level, base_points,
     economic_benefit, participants_needed, status, deadline, published_at,
-    creator:profiles!requests_creator_id_fkey ( id, full_name, avatar_url, medal ),
+    creator:profiles!requests_creator_id_fkey ( id, full_name, avatar_url, medal, whatsapp_number ),
     request_tags ( tag:tags ( id, name, slug, is_custom ) ),
     applications ( count )
   ''';
@@ -84,6 +84,7 @@ class FeedRepository {
         fullName: creatorJson['full_name'] as String,
         avatarUrl: creatorJson['avatar_url'] as String?,
         medal: _parseMedal(creatorJson['medal'] as String? ?? 'hierro'),
+        whatsappNumber: creatorJson['whatsapp_number'] as String?,
       ),
       tags: tags,
       applicationsCount: count,

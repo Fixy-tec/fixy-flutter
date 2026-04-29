@@ -66,9 +66,8 @@ class FeedPage extends ConsumerWidget {
                           const SizedBox(height: 12),
                       itemBuilder: (context, i) => RequestCard(
                         request: requests[i],
-                        onTap: () {
-                          // Detalle de solicitud - Sprint 5
-                        },
+                        onTap: () =>
+                            context.push('/requests/${requests[i].id}'),
                       ),
                     ),
                   );

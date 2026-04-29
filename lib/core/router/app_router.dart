@@ -9,6 +9,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
+import '../../features/applications/presentation/pages/request_detail_page.dart';
 import '../../features/feed/presentation/pages/feed_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/ranking/presentation/pages/ranking_page.dart';
@@ -66,6 +67,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/create-request',
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const CreateRequestPage(),
+      ),
+      GoRoute(
+        path: '/requests/:id',
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) =>
+            RequestDetailPage(requestId: state.pathParameters['id']!),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(navigationShell: shell),

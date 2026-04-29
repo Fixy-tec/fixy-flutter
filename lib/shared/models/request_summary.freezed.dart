@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RequestCreator {
 
- String get id; String get fullName; String? get avatarUrl; Medal get medal;
+ String get id; String get fullName; String? get avatarUrl; Medal get medal; String? get whatsappNumber;
 /// Create a copy of RequestCreator
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RequestCreatorCopyWith<RequestCreator> get copyWith => _$RequestCreatorCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RequestCreator&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.medal, medal) || other.medal == medal));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RequestCreator&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.medal, medal) || other.medal == medal)&&(identical(other.whatsappNumber, whatsappNumber) || other.whatsappNumber == whatsappNumber));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,fullName,avatarUrl,medal);
+int get hashCode => Object.hash(runtimeType,id,fullName,avatarUrl,medal,whatsappNumber);
 
 @override
 String toString() {
-  return 'RequestCreator(id: $id, fullName: $fullName, avatarUrl: $avatarUrl, medal: $medal)';
+  return 'RequestCreator(id: $id, fullName: $fullName, avatarUrl: $avatarUrl, medal: $medal, whatsappNumber: $whatsappNumber)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RequestCreatorCopyWith<$Res>  {
   factory $RequestCreatorCopyWith(RequestCreator value, $Res Function(RequestCreator) _then) = _$RequestCreatorCopyWithImpl;
 @useResult
 $Res call({
- String id, String fullName, String? avatarUrl, Medal medal
+ String id, String fullName, String? avatarUrl, Medal medal, String? whatsappNumber
 });
 
 
@@ -65,13 +65,14 @@ class _$RequestCreatorCopyWithImpl<$Res>
 
 /// Create a copy of RequestCreator
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? fullName = null,Object? avatarUrl = freezed,Object? medal = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? fullName = null,Object? avatarUrl = freezed,Object? medal = null,Object? whatsappNumber = freezed,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
 as String?,medal: null == medal ? _self.medal : medal // ignore: cast_nullable_to_non_nullable
-as Medal,
+as Medal,whatsappNumber: freezed == whatsappNumber ? _self.whatsappNumber : whatsappNumber // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String fullName,  String? avatarUrl,  Medal medal)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String fullName,  String? avatarUrl,  Medal medal,  String? whatsappNumber)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RequestCreator() when $default != null:
-return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal);case _:
+return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal,_that.whatsappNumber);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String fullName,  String? avatarUrl,  Medal medal)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String fullName,  String? avatarUrl,  Medal medal,  String? whatsappNumber)  $default,) {final _that = this;
 switch (_that) {
 case _RequestCreator():
-return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal);case _:
+return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal,_that.whatsappNumber);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String fullName,  String? avatarUrl,  Medal medal)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String fullName,  String? avatarUrl,  Medal medal,  String? whatsappNumber)?  $default,) {final _that = this;
 switch (_that) {
 case _RequestCreator() when $default != null:
-return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal);case _:
+return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal,_that.whatsappNumber);case _:
   return null;
 
 }
@@ -212,13 +213,14 @@ return $default(_that.id,_that.fullName,_that.avatarUrl,_that.medal);case _:
 @JsonSerializable()
 
 class _RequestCreator implements RequestCreator {
-  const _RequestCreator({required this.id, required this.fullName, this.avatarUrl, this.medal = Medal.hierro});
+  const _RequestCreator({required this.id, required this.fullName, this.avatarUrl, this.medal = Medal.hierro, this.whatsappNumber});
   factory _RequestCreator.fromJson(Map<String, dynamic> json) => _$RequestCreatorFromJson(json);
 
 @override final  String id;
 @override final  String fullName;
 @override final  String? avatarUrl;
 @override@JsonKey() final  Medal medal;
+@override final  String? whatsappNumber;
 
 /// Create a copy of RequestCreator
 /// with the given fields replaced by the non-null parameter values.
@@ -233,16 +235,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RequestCreator&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.medal, medal) || other.medal == medal));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RequestCreator&&(identical(other.id, id) || other.id == id)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.medal, medal) || other.medal == medal)&&(identical(other.whatsappNumber, whatsappNumber) || other.whatsappNumber == whatsappNumber));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,fullName,avatarUrl,medal);
+int get hashCode => Object.hash(runtimeType,id,fullName,avatarUrl,medal,whatsappNumber);
 
 @override
 String toString() {
-  return 'RequestCreator(id: $id, fullName: $fullName, avatarUrl: $avatarUrl, medal: $medal)';
+  return 'RequestCreator(id: $id, fullName: $fullName, avatarUrl: $avatarUrl, medal: $medal, whatsappNumber: $whatsappNumber)';
 }
 
 
@@ -253,7 +255,7 @@ abstract mixin class _$RequestCreatorCopyWith<$Res> implements $RequestCreatorCo
   factory _$RequestCreatorCopyWith(_RequestCreator value, $Res Function(_RequestCreator) _then) = __$RequestCreatorCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String fullName, String? avatarUrl, Medal medal
+ String id, String fullName, String? avatarUrl, Medal medal, String? whatsappNumber
 });
 
 
@@ -270,13 +272,14 @@ class __$RequestCreatorCopyWithImpl<$Res>
 
 /// Create a copy of RequestCreator
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? fullName = null,Object? avatarUrl = freezed,Object? medal = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? fullName = null,Object? avatarUrl = freezed,Object? medal = null,Object? whatsappNumber = freezed,}) {
   return _then(_RequestCreator(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
 as String?,medal: null == medal ? _self.medal : medal // ignore: cast_nullable_to_non_nullable
-as Medal,
+as Medal,whatsappNumber: freezed == whatsappNumber ? _self.whatsappNumber : whatsappNumber // ignore: cast_nullable_to_non_nullable
+as String?,
   ));
 }
 

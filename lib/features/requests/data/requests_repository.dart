@@ -34,7 +34,7 @@ class RequestsRepository {
   static const _selectQuery = '''
     id, type, title, description, difficulty_level, base_points,
     economic_benefit, participants_needed, status, deadline, published_at,
-    creator:profiles!requests_creator_id_fkey ( id, full_name, avatar_url, medal ),
+    creator:profiles!requests_creator_id_fkey ( id, full_name, avatar_url, medal, whatsapp_number ),
     request_tags ( tag:tags ( id, name, slug, is_custom ) ),
     applications ( count )
   ''';
@@ -63,6 +63,24 @@ class RequestsRepository {
     }
 
     return requestId;
+  }
+
+  /// Detalle de una solicitud (para la vista de detalle).
+  Future<RequestSummary?> fetchById(String id) async {
+    final row = await _client
+        .from('requests')
+        .select(_selectQuery)
+        .eq('id', id)
+        .maybeSingle();
+    if (row == null) return null;
+    return _mapRequestRow(row);
+  }
+
+  /// Marca la solicitud como completada (solo creador, solo si en proceso).
+  Future<void> markCompleted(String requestId) async {
+    await _client
+        .from('requests')
+        .update({'status': 'completada'}).eq('id', requestId);
   }
 
   /// Solicitudes creadas por el usuario.
@@ -212,6 +230,7 @@ class RequestsRepository {
         fullName: creatorJson['full_name'] as String,
         avatarUrl: creatorJson['avatar_url'] as String?,
         medal: _parseMedal(creatorJson['medal'] as String? ?? 'hierro'),
+        whatsappNumber: creatorJson['whatsapp_number'] as String?,
       ),
       tags: tags,
       applicationsCount: count,

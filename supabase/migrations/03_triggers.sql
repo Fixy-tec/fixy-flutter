@@ -117,17 +117,19 @@ begin
     insert into public.notifications (user_id, type, title, body, related_request_id)
     values (
       new.applicant_id,
-      'application_approved',
+      'application_approved'::notification_type,
       'Tu postulacion fue aprobada',
-      v_title || ' - WhatsApp desbloqueado'
+      v_title || ' - WhatsApp desbloqueado',
+      new.request_id
     );
   elsif new.status = 'rechazada' then
     insert into public.notifications (user_id, type, title, body, related_request_id)
     values (
       new.applicant_id,
-      'application_rejected',
+      'application_rejected'::notification_type,
       'Tu postulacion fue rechazada',
-      v_title
+      v_title,
+      new.request_id
     );
   end if;
   return new;

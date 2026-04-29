@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../shared/widgets/request_card.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -78,12 +79,7 @@ class FeedPage extends ConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Crear solicitud - Sprint 4
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Crear solicitud - Sprint 4')),
-          );
-        },
+        onPressed: () => context.push('/create-request'),
         child: const Icon(Icons.add),
       ),
     );

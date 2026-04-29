@@ -14,7 +14,11 @@ create trigger on_auth_user_created
 -- updated_at automatico
 -- ------------------------------------------------------------
 create or replace function public.set_updated_at()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   new.updated_at := now();
   return new;
@@ -41,7 +45,11 @@ create trigger trg_device_tokens_updated_at
 -- Calcular base_points al insertar request
 -- ------------------------------------------------------------
 create or replace function public.set_request_base_points()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   new.base_points := public.base_points_for_level(new.difficulty_level);
   return new;
@@ -56,7 +64,11 @@ create trigger trg_request_base_points
 -- Notificar al creador cuando hay nueva postulacion
 -- ------------------------------------------------------------
 create or replace function public.notify_new_application()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 declare
   v_creator_id uuid;
   v_title      text;
@@ -89,7 +101,11 @@ create trigger trg_notify_new_application
 -- Notificar al postulante cuando cambia el estado de su postulacion
 -- ------------------------------------------------------------
 create or replace function public.notify_application_status_change()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 declare
   v_title text;
 begin
@@ -127,7 +143,11 @@ create trigger trg_notify_application_status
 -- y mover request a en_proceso al aprobar
 -- ------------------------------------------------------------
 create or replace function public.handle_application_approval()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 declare
   v_already int;
 begin
@@ -158,7 +178,11 @@ create trigger trg_handle_application_approval
 -- Al insertar rating: calcular puntos y aplicarlos
 -- ------------------------------------------------------------
 create or replace function public.process_new_rating()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 declare
   v_request    public.requests%rowtype;
   v_is_creator boolean;
@@ -184,7 +208,11 @@ create trigger trg_process_new_rating
 
 -- after insert: aplicar los puntos y refrescar stats
 create or replace function public.apply_rating_effects()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   perform public.apply_points_change(
     new.rated_id,
@@ -206,7 +234,11 @@ create trigger trg_apply_rating_effects
 -- Notificar tag-match al publicar nuevo request
 -- ------------------------------------------------------------
 create or replace function public.notify_tag_match()
-returns trigger language plpgsql as $$
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
 begin
   insert into public.notifications (user_id, type, title, body, related_request_id)
   select distinct ut.user_id,

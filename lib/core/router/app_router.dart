@@ -12,6 +12,7 @@ import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/feed/presentation/pages/feed_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/ranking/presentation/pages/ranking_page.dart';
+import '../../features/requests/presentation/pages/create_request_page.dart';
 import '../../features/requests/presentation/pages/my_requests_page.dart';
 import '../supabase/supabase_client.dart';
 import 'app_shell.dart';
@@ -45,10 +46,10 @@ final routerProvider = Provider<GoRouter>((ref) {
     redirect: (context, state) {
       final loggedIn = supabase.auth.currentSession != null;
       final loc = state.matchedLocation;
-      final inAuthRoute = loc == '/login' || loc == '/register';
+      final isAuthRoute = loc == '/login' || loc == '/register';
 
-      if (!loggedIn && !inAuthRoute) return '/login';
-      if (loggedIn && inAuthRoute) return '/feed';
+      if (!loggedIn && !isAuthRoute) return '/login';
+      if (loggedIn && isAuthRoute) return '/feed';
       return null;
     },
     debugLogDiagnostics: kDebugMode,
@@ -60,6 +61,11 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: '/register',
         builder: (context, state) => const RegisterPage(),
+      ),
+      GoRoute(
+        path: '/create-request',
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const CreateRequestPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(navigationShell: shell),

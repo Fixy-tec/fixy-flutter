@@ -79,6 +79,8 @@ create or replace function public.apply_points_change(
 )
 returns void
 language plpgsql
+security definer
+set search_path = public
 as $$
 declare
   v_old_points int;
@@ -123,6 +125,8 @@ $$;
 create or replace function public.refresh_user_rating_stats(p_user_id uuid)
 returns void
 language plpgsql
+security definer
+set search_path = public
 as $$
 begin
   update public.profiles p

@@ -45,6 +45,7 @@ class FeedPage extends ConsumerWidget {
                   hasScrollBody: false,
                   child: ErrorRetry(
                     error: e,
+                    inline: true,
                     onRetry: () => ref.invalidate(feedProvider),
                   ),
                 ),
@@ -58,6 +59,7 @@ class FeedPage extends ConsumerWidget {
                         subtitle: filter == FeedFilter.recomendados
                             ? 'Agrega especialidades a tu perfil para recibir recomendaciones.'
                             : 'No hay solicitudes en esta categoria.',
+                        inline: true,
                         action: FilledButton.icon(
                           onPressed: () =>
                               context.push('/create-request'),

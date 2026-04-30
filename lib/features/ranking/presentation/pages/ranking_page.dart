@@ -71,22 +71,18 @@ class RankingPage extends ConsumerWidget {
                 padding: EdgeInsets.all(40),
                 child: Center(child: CircularProgressIndicator()),
               ),
-              error: (e, _) => Padding(
-                padding: const EdgeInsets.all(20),
-                child: ErrorRetry(
-                  error: e,
-                  onRetry: () => ref.invalidate(rankingTopProvider),
-                ),
+              error: (e, _) => ErrorRetry(
+                error: e,
+                inline: true,
+                onRetry: () => ref.invalidate(rankingTopProvider),
               ),
               data: (users) {
                 if (users.isEmpty) {
-                  return const Padding(
-                    padding: EdgeInsets.all(20),
-                    child: EmptyState(
-                      icon: Icons.leaderboard_outlined,
-                      title: 'Sin usuarios para mostrar',
-                      subtitle: 'Cambia de filtro o vuelve mas tarde.',
-                    ),
+                  return const EmptyState(
+                    icon: Icons.leaderboard_outlined,
+                    title: 'Sin usuarios para mostrar',
+                    subtitle: 'Cambia de filtro o vuelve mas tarde.',
+                    inline: true,
                   );
                 }
                 return Column(

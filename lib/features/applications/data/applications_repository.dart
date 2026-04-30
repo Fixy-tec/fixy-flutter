@@ -33,6 +33,12 @@ class ApplicationsRepository {
         .update({'status': 'rechazada'}).eq('id', applicationId);
   }
 
+  /// Retira una postulacion propia (solo si esta pendiente).
+  /// RLS exige que sea el postulante (applications_delete_own).
+  Future<void> withdraw(String applicationId) async {
+    await _client.from('applications').delete().eq('id', applicationId);
+  }
+
   /// Postulantes de un request (visible al creador via RLS).
   Future<List<ApplicantInfo>> listForRequest(String requestId) async {
     final rows = await _client

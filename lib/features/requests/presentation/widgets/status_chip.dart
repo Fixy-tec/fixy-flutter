@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/models/application_summary.dart';
 import '../../../../shared/models/request_summary.dart';
 
@@ -13,26 +14,26 @@ class StatusChip extends StatelessWidget {
   factory StatusChip.application(ApplicationStatus status) {
     return switch (status) {
       ApplicationStatus.aprobada =>
-        const StatusChip._(label: 'Aprobado', color: Color(0xFF2E7D32)),
+        const StatusChip._(label: 'Aprobado', color: AppColors.statusApproved),
       ApplicationStatus.rechazada =>
-        const StatusChip._(label: 'Rechazado', color: Color(0xFFC62828)),
+        const StatusChip._(label: 'Rechazado', color: AppColors.statusRejected),
       ApplicationStatus.pendiente =>
-        const StatusChip._(label: 'Pendiente', color: Color(0xFFE6B800)),
+        const StatusChip._(label: 'Pendiente', color: AppColors.statusPending),
     };
   }
 
   factory StatusChip.request(RequestStatus status) {
     return switch (status) {
       RequestStatus.abierta =>
-        const StatusChip._(label: 'Abierta', color: Color(0xFF1A4CA3)),
+        const StatusChip._(label: 'Abierta', color: AppColors.statusOpen),
       RequestStatus.enRevision =>
-        const StatusChip._(label: 'En revision', color: Color(0xFFE6B800)),
+        const StatusChip._(label: 'En revision', color: AppColors.statusInReview),
       RequestStatus.enProceso =>
-        const StatusChip._(label: 'En proceso', color: Color(0xFF057F78)),
+        const StatusChip._(label: 'En proceso', color: AppColors.statusInProcess),
       RequestStatus.completada =>
-        const StatusChip._(label: 'Completada', color: Color(0xFF2E7D32)),
+        const StatusChip._(label: 'Completada', color: AppColors.statusCompleted),
       RequestStatus.cancelada =>
-        const StatusChip._(label: 'Cancelada', color: Color(0xFFC62828)),
+        const StatusChip._(label: 'Cancelada', color: AppColors.statusRejected),
     };
   }
 

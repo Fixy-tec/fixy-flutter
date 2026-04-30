@@ -39,6 +39,20 @@ class ProfileRepository {
     await _client.from('profiles').update(data.toJson()).eq('id', userId);
   }
 
+  /// Lee un perfil publico por id (cualquier usuario autenticado puede ver
+  /// el perfil de otro: nombre, carrera, especialidades, ratings).
+  Future<Map<String, dynamic>?> fetchPublicProfile(String userId) async {
+    final row = await _client
+        .from('profiles')
+        .select(
+          'id, full_name, career, cycle, bio, avatar_url, total_points, '
+          'medal, avg_rating, ratings_count, portfolio_url, linkedin_url',
+        )
+        .eq('id', userId)
+        .maybeSingle();
+    return row;
+  }
+
   /// Calificaciones recibidas por el usuario, con info del rater.
   Future<List<RatingReceived>> fetchRatingsReceived(String userId,
       {int limit = 5}) async {

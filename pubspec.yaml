@@ -1,7 +1,7 @@
 name: fixy
 description: "Plataforma de asesorias y proyectos para estudiantes Tecsup."
 publish_to: "none"
-version: 0.1.0+1
+version: 1.0.0+1
 
 environment:
   sdk: ^3.11.4
@@ -51,7 +51,25 @@ dev_dependencies:
   custom_lint: ^0.7.0
   riverpod_lint: ^2.6.3
 
+  # Iconos del launcher (Android + iOS)
+  flutter_launcher_icons: ^0.14.1
+
 flutter:
   uses-material-design: true
   assets:
     - .env
+    - assets/logo.png
+    - assets/icon_foreground.png
+
+# Iconos de la app generados con: dart run flutter_launcher_icons
+flutter_launcher_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  # iOS no soporta transparencia: usa el robot con fondo brand
+  background_color_ios: "#1A4CA3"
+  image_path_ios: "assets/icon_foreground.png"
+  # Android: adaptive icon con foreground (robot) sobre fondo brand
+  adaptive_icon_background: "#1A4CA3"
+  adaptive_icon_foreground: "assets/icon_foreground.png"
+  image_path_android: "assets/icon_foreground.png"

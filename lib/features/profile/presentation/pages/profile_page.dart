@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/constants/reputation.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/models/rating_received.dart';
 import '../../../../shared/widgets/medal_badge.dart';
 import '../../../../shared/widgets/tag_chip.dart';
@@ -446,7 +447,7 @@ class _RatingTile extends StatelessWidget {
                 (_) => const Icon(
                   Icons.star,
                   size: 16,
-                  color: Color(0xFFE6B800),
+                  color: AppColors.medalOro,
                 ),
               ),
             ),

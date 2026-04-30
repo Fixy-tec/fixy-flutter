@@ -2,10 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/theme/app_colors.dart';
+import '../../../../core/utils/auth_error_messages.dart';
 import '../../../../shared/models/application_summary.dart';
 import '../../../../shared/models/request_summary.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/request_card.dart';
+import '../../../applications/presentation/providers/applications_providers.dart';
+import '../../../feed/presentation/providers/feed_providers.dart';
 import '../../../ratings/presentation/providers/ratings_providers.dart';
 import '../providers/requests_providers.dart';
 import '../widgets/status_chip.dart';
@@ -93,13 +97,51 @@ class _ApplicationsTab extends ConsumerWidget {
   }
 }
 
-class _ApplicationCard extends StatelessWidget {
+class _ApplicationCard extends ConsumerWidget {
   const _ApplicationCard({required this.item});
   final ApplicationSummary item;
 
+  Future<void> _withdraw(BuildContext context, WidgetRef ref) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Retirar postulacion'),
+        content: const Text('Tu postulacion sera eliminada. ¿Continuar?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancelar'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Retirar'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+
+    try {
+      await ref.read(applicationsRepositoryProvider).withdraw(item.id);
+      ref.invalidate(myApplicationsProvider);
+      ref.invalidate(applicantsForRequestProvider(item.requestId));
+      ref.invalidate(myApplicationOnRequestProvider(item.requestId));
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Postulacion retirada')),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(authErrorMessage(e))),
+      );
+    }
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final isApproved = item.status == ApplicationStatus.aprobada;
+    final isPending = item.status == ApplicationStatus.pendiente;
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -124,6 +166,23 @@ class _ApplicationCard extends StatelessWidget {
                   ),
                 ),
                 StatusChip.application(item.status),
+                if (isPending)
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert, size: 20),
+                    onSelected: (v) {
+                      if (v == 'withdraw') _withdraw(context, ref);
+                    },
+                    itemBuilder: (_) => const [
+                      PopupMenuItem(
+                        value: 'withdraw',
+                        child: ListTile(
+                          leading: Icon(Icons.delete_outline),
+                          title: Text('Retirar postulacion'),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                    ],
+                  ),
               ],
             ),
             const SizedBox(height: 8),
@@ -179,12 +238,83 @@ class _CreatedTab extends ConsumerWidget {
   }
 }
 
-class _CreatedCard extends StatelessWidget {
+class _CreatedCard extends ConsumerWidget {
   const _CreatedCard({required this.request});
   final RequestSummary request;
 
+  bool get _canCancel =>
+      request.status == RequestStatus.abierta ||
+      request.status == RequestStatus.enRevision;
+  bool get _canDelete => _canCancel && request.applicationsCount == 0;
+
+  Future<void> _onCancel(BuildContext context, WidgetRef ref) async {
+    final ok = await _confirm(context,
+        title: 'Cancelar solicitud',
+        message:
+            'La solicitud quedara cancelada. Los postulantes ya no podran aceptar.',
+        action: 'Cancelar solicitud');
+    if (!ok) return;
+    try {
+      await ref.read(requestsRepositoryProvider).cancelRequest(request.id);
+      ref.invalidate(myCreatedRequestsProvider);
+      ref.invalidate(feedProvider);
+      if (!context.mounted) return;
+      _toast(context, 'Solicitud cancelada');
+    } catch (e) {
+      if (!context.mounted) return;
+      _toast(context, authErrorMessage(e));
+    }
+  }
+
+  Future<void> _onDelete(BuildContext context, WidgetRef ref) async {
+    final ok = await _confirm(context,
+        title: 'Eliminar solicitud',
+        message: 'Esta accion es permanente y no se puede deshacer.',
+        action: 'Eliminar');
+    if (!ok) return;
+    try {
+      await ref.read(requestsRepositoryProvider).deleteRequest(request.id);
+      ref.invalidate(myCreatedRequestsProvider);
+      ref.invalidate(feedProvider);
+      if (!context.mounted) return;
+      _toast(context, 'Solicitud eliminada');
+    } catch (e) {
+      if (!context.mounted) return;
+      _toast(context, authErrorMessage(e));
+    }
+  }
+
+  void _toast(BuildContext context, String msg) {
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
+  }
+
+  Future<bool> _confirm(BuildContext context,
+      {required String title,
+      required String message,
+      required String action}) async {
+    final r = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Volver'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(action),
+          ),
+        ],
+      ),
+    );
+    return r ?? false;
+  }
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Card(
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -209,6 +339,36 @@ class _CreatedCard extends StatelessWidget {
                   ),
                 ),
                 StatusChip.request(request.status),
+                if (_canCancel)
+                  PopupMenuButton<String>(
+                    icon: const Icon(Icons.more_vert, size: 20),
+                    onSelected: (v) {
+                      if (v == 'cancel') _onCancel(context, ref);
+                      if (v == 'delete') _onDelete(context, ref);
+                    },
+                    itemBuilder: (_) => [
+                      const PopupMenuItem(
+                        value: 'cancel',
+                        child: ListTile(
+                          leading: Icon(Icons.block_outlined),
+                          title: Text('Cancelar'),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
+                      if (_canDelete)
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: ListTile(
+                            leading: Icon(Icons.delete_outline,
+                                color: AppColors.statusRejected),
+                            title: Text('Eliminar',
+                                style: TextStyle(
+                                    color: AppColors.statusRejected)),
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        ),
+                    ],
+                  ),
               ],
             ),
             const SizedBox(height: 8),
@@ -347,7 +507,7 @@ class _CompletedCard extends ConsumerWidget {
                           size: 16,
                           color: rated
                               ? Theme.of(context).colorScheme.primary
-                              : Colors.orangeAccent,
+                              : AppColors.warning,
                         ),
                         const SizedBox(width: 6),
                         Text(
@@ -355,7 +515,7 @@ class _CompletedCard extends ConsumerWidget {
                           style: TextStyle(
                             color: rated
                                 ? Theme.of(context).colorScheme.onSurfaceVariant
-                                : Colors.orangeAccent,
+                                : AppColors.warning,
                             fontWeight: FontWeight.w600,
                             fontSize: 13,
                           ),

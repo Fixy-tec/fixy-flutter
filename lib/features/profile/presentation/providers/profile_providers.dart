@@ -39,3 +39,20 @@ final myTagsProvider = FutureProvider<List<Tag>>((ref) async {
   if (uid == null) return const [];
   return ref.watch(profileRepositoryProvider).fetchUserTags(uid);
 });
+
+// ---------- Perfil publico (otro usuario) ----------
+
+final publicProfileProvider =
+    FutureProvider.family<Map<String, dynamic>?, String>((ref, userId) {
+  return ref.watch(profileRepositoryProvider).fetchPublicProfile(userId);
+});
+
+final publicUserTagsProvider =
+    FutureProvider.family<List<Tag>, String>((ref, userId) {
+  return ref.watch(profileRepositoryProvider).fetchUserTags(userId);
+});
+
+final publicUserRatingsProvider =
+    FutureProvider.family<List<RatingReceived>, String>((ref, userId) {
+  return ref.watch(profileRepositoryProvider).fetchRatingsReceived(userId);
+});

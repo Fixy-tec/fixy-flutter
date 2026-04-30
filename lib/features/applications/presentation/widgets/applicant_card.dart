@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../shared/models/applicant_info.dart';
 import '../../../../shared/models/application_summary.dart';
@@ -30,7 +31,10 @@ class ApplicantCard extends StatelessWidget {
     final isPending = applicant.status == ApplicationStatus.pendiente;
 
     return Card(
-      child: Padding(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push('/users/${applicant.applicantId}'),
+        child: Padding(
         padding: const EdgeInsets.all(14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,6 +113,7 @@ class ApplicantCard extends StatelessWidget {
             ],
           ],
         ),
+      ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/auth_error_messages.dart';
@@ -28,8 +29,15 @@ class RequestDetailPage extends ConsumerWidget {
     final detailAsync = ref.watch(requestDetailProvider(requestId));
     final uid = ref.watch(currentSessionProvider)?.user.id;
 
+    final request = detailAsync.value;
+    final isCreator = request != null && uid == request.creator.id;
     return Scaffold(
-      appBar: AppBar(title: const Text('Detalle')),
+      appBar: AppBar(
+        title: const Text('Detalle'),
+        actions: [
+          if (isCreator) _CreatorMenu(request: request),
+        ],
+      ),
       body: detailAsync.when(
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
@@ -123,18 +131,31 @@ class _Header extends StatelessWidget {
             children: request.tags.map((t) => TagChip(tag: t)).toList(),
           ),
         const SizedBox(height: 16),
-        Row(
-          children: [
-            const Icon(Icons.person_outline, size: 18),
-            const SizedBox(width: 6),
-            Expanded(
-              child: Text(
-                request.creator.fullName,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
+        InkWell(
+          onTap: () => context.push('/users/${request.creator.id}'),
+          borderRadius: BorderRadius.circular(8),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            child: Row(
+              children: [
+                const Icon(Icons.person_outline, size: 18),
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    request.creator.fullName,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
+                  ),
+                ),
+                MedalBadge(medal: request.creator.medal, compact: true),
+                const SizedBox(width: 4),
+                Icon(
+                  Icons.chevron_right,
+                  size: 18,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                ),
+              ],
             ),
-            MedalBadge(medal: request.creator.medal, compact: true),
-          ],
+          ),
         ),
         const SizedBox(height: 8),
         Wrap(
@@ -546,5 +567,128 @@ class _Banner extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+// ============================================================
+// Menu del creador en el AppBar (cancelar / eliminar)
+// ============================================================
+class _CreatorMenu extends ConsumerWidget {
+  const _CreatorMenu({required this.request});
+  final RequestSummary request;
+
+  bool get _canCancel =>
+      request.status == RequestStatus.abierta ||
+      request.status == RequestStatus.enRevision;
+  bool get _canDelete =>
+      _canCancel && request.applicationsCount == 0;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    if (!_canCancel) return const SizedBox.shrink();
+    return PopupMenuButton<String>(
+      onSelected: (v) async {
+        if (v == 'cancel') {
+          await _cancel(context, ref);
+        } else if (v == 'delete') {
+          await _delete(context, ref);
+        }
+      },
+      itemBuilder: (_) => [
+        const PopupMenuItem(
+          value: 'cancel',
+          child: ListTile(
+            leading: Icon(Icons.block_outlined),
+            title: Text('Cancelar solicitud'),
+            contentPadding: EdgeInsets.zero,
+          ),
+        ),
+        if (_canDelete)
+          const PopupMenuItem(
+            value: 'delete',
+            child: ListTile(
+              leading:
+                  Icon(Icons.delete_outline, color: AppColors.statusRejected),
+              title: Text('Eliminar',
+                  style: TextStyle(color: AppColors.statusRejected)),
+              contentPadding: EdgeInsets.zero,
+            ),
+          ),
+      ],
+    );
+  }
+
+  Future<void> _cancel(BuildContext context, WidgetRef ref) async {
+    final ok = await _confirm(
+      context,
+      title: 'Cancelar solicitud',
+      message: 'Quedara cancelada y los postulantes ya no podran aceptar.',
+      action: 'Cancelar solicitud',
+    );
+    if (!ok) return;
+    try {
+      await ref.read(requestsRepositoryProvider).cancelRequest(request.id);
+      ref.invalidate(requestDetailProvider(request.id));
+      ref.invalidate(myCreatedRequestsProvider);
+      ref.invalidate(feedProvider);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Solicitud cancelada')),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(authErrorMessage(e))),
+      );
+    }
+  }
+
+  Future<void> _delete(BuildContext context, WidgetRef ref) async {
+    final ok = await _confirm(
+      context,
+      title: 'Eliminar solicitud',
+      message: 'Esta accion es permanente y no se puede deshacer.',
+      action: 'Eliminar',
+    );
+    if (!ok) return;
+    try {
+      await ref.read(requestsRepositoryProvider).deleteRequest(request.id);
+      ref.invalidate(myCreatedRequestsProvider);
+      ref.invalidate(feedProvider);
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Solicitud eliminada')),
+      );
+      Navigator.of(context).pop();
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(authErrorMessage(e))),
+      );
+    }
+  }
+
+  Future<bool> _confirm(BuildContext context,
+      {required String title,
+      required String message,
+      required String action}) async {
+    final r = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(title),
+        content: Text(message),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Volver'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(action),
+          ),
+        ],
+      ),
+    );
+    return r ?? false;
   }
 }

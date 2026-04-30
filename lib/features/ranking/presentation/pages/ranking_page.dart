@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/models/ranking_user.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/medal_badge.dart';
@@ -192,8 +193,8 @@ class _MyPositionCard extends StatelessWidget {
                 '${weeklyDelta > 0 ? '+' : ''}$weeklyDelta esta semana',
                 style: TextStyle(
                   color: weeklyDelta > 0
-                      ? Colors.lightGreenAccent.shade400
-                      : Colors.redAccent,
+                      ? AppColors.pointsPositive
+                      : AppColors.pointsNegative,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -219,9 +220,9 @@ class _RankingTile extends StatelessWidget {
         .map((p) => p[0].toUpperCase())
         .join();
     final rankColor = switch (user.rank) {
-      1 => const Color(0xFFE6B800),
-      2 => const Color(0xFFB8C0CC),
-      3 => const Color(0xFFB07A4A),
+      1 => AppColors.medalOro,
+      2 => AppColors.medalPlata,
+      3 => AppColors.medalBronce,
       _ => scheme.onSurfaceVariant,
     };
 

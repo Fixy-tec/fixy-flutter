@@ -33,7 +33,7 @@ class RequestCard extends StatelessWidget {
                   Text(
                     '+${request.basePoints} pts',
                     style: theme.textTheme.labelLarge?.copyWith(
-                      color: Colors.lightGreenAccent.shade400,
+                      color: AppColors.pointsPositive,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -138,7 +138,7 @@ class _CreatorRow extends StatelessWidget {
           Text(
             '· S/ ${request.economicBenefit!.toStringAsFixed(2)}',
             style: theme.textTheme.bodySmall?.copyWith(
-              color: Colors.lightGreenAccent.shade400,
+              color: AppColors.pointsPositive,
               fontWeight: FontWeight.w600,
             ),
           ),

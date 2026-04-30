@@ -17,7 +17,7 @@ class FixyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.dark,
+      themeMode: ThemeMode.system,
       routerConfig: router,
       locale: const Locale('es'),
       supportedLocales: const [Locale('es'), Locale('en')],

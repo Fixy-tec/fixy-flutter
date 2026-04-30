@@ -83,6 +83,20 @@ class RequestsRepository {
         .update({'status': 'completada'}).eq('id', requestId);
   }
 
+  /// Cancela la solicitud (solo creador). RLS exige que sea creador.
+  /// La app evita cancelar si ya esta en proceso o completada.
+  Future<void> cancelRequest(String requestId) async {
+    await _client
+        .from('requests')
+        .update({'status': 'cancelada'}).eq('id', requestId);
+  }
+
+  /// Elimina la solicitud por completo (cascade borra applications y tags).
+  /// RLS exige que sea creador. La app evita eliminar si ya hay postulantes.
+  Future<void> deleteRequest(String requestId) async {
+    await _client.from('requests').delete().eq('id', requestId);
+  }
+
   /// Solicitudes creadas por el usuario.
   Future<List<RequestSummary>> fetchMyCreated(String userId) async {
     final rows = await _client

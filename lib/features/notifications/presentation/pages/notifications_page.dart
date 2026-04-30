@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/time_ago.dart';
 import '../../../../shared/models/app_notification.dart';
 import '../../../../shared/widgets/empty_state.dart';
@@ -110,22 +111,16 @@ class _NotificationTile extends ConsumerWidget {
       NotificationType.newApplication => (Icons.person_add, scheme.primary),
       NotificationType.applicationApproved => (
           Icons.check_circle,
-          const Color(0xFF2E7D32)
+          AppColors.statusApproved
         ),
       NotificationType.applicationRejected => (
           Icons.cancel,
-          const Color(0xFFC62828)
+          AppColors.statusRejected
         ),
       NotificationType.requestCompleted => (Icons.task_alt, scheme.primary),
       NotificationType.tagMatch => (Icons.local_offer_outlined, scheme.secondary),
-      NotificationType.deadlineReminder => (
-          Icons.access_time,
-          const Color(0xFFE6B800)
-        ),
-      NotificationType.medalChanged => (
-          Icons.workspace_premium,
-          const Color(0xFFE6B800)
-        ),
+      NotificationType.deadlineReminder => (Icons.access_time, AppColors.warning),
+      NotificationType.medalChanged => (Icons.workspace_premium, AppColors.medalOro),
       NotificationType.unknown => (Icons.notifications, scheme.onSurfaceVariant),
     };
   }

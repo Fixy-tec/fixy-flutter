@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/constants/reputation.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../../../core/utils/auth_error_messages.dart';
 import '../../../../shared/models/request_summary.dart';
 import '../../../../shared/models/tag.dart';
@@ -222,7 +223,7 @@ class _CreateRequestPageState extends ConsumerState<CreateRequestPage> {
               Text(
                 '+$basePoints pts base para el asesor seleccionado',
                 style: TextStyle(
-                  color: Colors.lightGreenAccent.shade400,
+                  color: AppColors.pointsPositive,
                   fontWeight: FontWeight.w600,
                 ),
               ),

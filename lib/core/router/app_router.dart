@@ -13,6 +13,7 @@ import '../../features/applications/presentation/pages/request_detail_page.dart'
 import '../../features/feed/presentation/pages/feed_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
+import '../../features/profile/presentation/pages/public_profile_page.dart';
 import '../../features/ranking/presentation/pages/ranking_page.dart';
 import '../../features/requests/presentation/pages/create_request_page.dart';
 import '../../features/requests/presentation/pages/my_requests_page.dart';
@@ -79,6 +80,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/notifications',
         parentNavigatorKey: _rootKey,
         builder: (context, state) => const NotificationsPage(),
+      ),
+      GoRoute(
+        path: '/users/:id',
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) =>
+            PublicProfilePage(userId: state.pathParameters['id']!),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(navigationShell: shell),

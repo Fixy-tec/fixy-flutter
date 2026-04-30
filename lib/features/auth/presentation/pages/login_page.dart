@@ -62,14 +62,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 24),
-                    Text(
-                      'Fixy',
-                      textAlign: TextAlign.center,
-                      style: theme.textTheme.displaySmall?.copyWith(
-                        fontWeight: FontWeight.w800,
-                        color: theme.colorScheme.primary,
-                      ),
+                    const SizedBox(height: 16),
+                    Image.asset(
+                      'assets/logo.png',
+                      height: 140,
+                      fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 8),
                     Text(
@@ -79,7 +76,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         color: theme.colorScheme.onSurfaceVariant,
                       ),
                     ),
-                    const SizedBox(height: 40),
+                    const SizedBox(height: 32),
                     TextFormField(
                       controller: _emailCtrl,
                       keyboardType: TextInputType.emailAddress,

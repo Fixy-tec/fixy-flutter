@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../shared/models/application_summary.dart';
 import '../../../../shared/models/request_summary.dart';
+import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/request_card.dart';
 import '../../../ratings/presentation/providers/ratings_providers.dart';
 import '../providers/requests_providers.dart';
@@ -412,15 +413,9 @@ class _EmptyView extends StatelessWidget {
   final String text;
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        const SizedBox(height: 80),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Text(text, textAlign: TextAlign.center),
-        ),
-      ],
+    return EmptyState(
+      icon: Icons.assignment_outlined,
+      title: text,
     );
   }
 }
@@ -430,15 +425,6 @@ class _ErrorView extends StatelessWidget {
   final Object error;
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      children: [
-        const SizedBox(height: 80),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 32),
-          child: Text('Error: $error', textAlign: TextAlign.center),
-        ),
-      ],
-    );
+    return ErrorRetry(error: error);
   }
 }

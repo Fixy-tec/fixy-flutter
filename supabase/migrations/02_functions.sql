@@ -187,6 +187,32 @@ begin
 end;
 $$;
 
+-- Recordatorio 24h antes de la fecha limite (RF-N06)
+create or replace function public.send_deadline_reminders()
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.notifications (user_id, type, title, body, related_request_id)
+  select req.creator_id,
+         'deadline_reminder'::notification_type,
+         'Tu solicitud vence pronto',
+         req.title || ' vence manana',
+         req.id
+  from public.requests req
+  where req.status in ('abierta', 'en_revision', 'en_proceso')
+    and req.deadline = (now() + interval '1 day')::date
+    and not exists (
+      select 1 from public.notifications n
+      where n.related_request_id = req.id
+        and n.type = 'deadline_reminder'
+        and n.created_at >= now() - interval '2 days'
+    );
+end;
+$$;
+
 -- Trigger: al insertar un profile no creado por handle_new_user, ya queda listo
 -- Trigger: al registrarse en auth.users, copiar a profiles automaticamente
 create or replace function public.handle_new_auth_user()

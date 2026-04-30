@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/request_card.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../notifications/presentation/providers/notifications_providers.dart';
@@ -42,19 +43,26 @@ class FeedPage extends ConsumerWidget {
                 ),
                 error: (e, _) => SliverFillRemaining(
                   hasScrollBody: false,
-                  child: Center(child: Text('Error: $e')),
+                  child: ErrorRetry(
+                    error: e,
+                    onRetry: () => ref.invalidate(feedProvider),
+                  ),
                 ),
                 data: (requests) {
                   if (requests.isEmpty) {
-                    return const SliverFillRemaining(
+                    return SliverFillRemaining(
                       hasScrollBody: false,
-                      child: Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(32),
-                          child: Text(
-                            'No hay solicitudes en esta categoria.',
-                            textAlign: TextAlign.center,
-                          ),
+                      child: EmptyState(
+                        icon: Icons.inbox_outlined,
+                        title: 'Sin solicitudes',
+                        subtitle: filter == FeedFilter.recomendados
+                            ? 'Agrega especialidades a tu perfil para recibir recomendaciones.'
+                            : 'No hay solicitudes en esta categoria.',
+                        action: FilledButton.icon(
+                          onPressed: () =>
+                              context.push('/create-request'),
+                          icon: const Icon(Icons.add),
+                          label: const Text('Crear solicitud'),
                         ),
                       ),
                     );

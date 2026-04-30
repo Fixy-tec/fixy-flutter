@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../shared/models/ranking_user.dart';
+import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/medal_badge.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../profile/presentation/providers/profile_providers.dart';
@@ -72,13 +73,20 @@ class RankingPage extends ConsumerWidget {
               ),
               error: (e, _) => Padding(
                 padding: const EdgeInsets.all(20),
-                child: Text('Error: $e'),
+                child: ErrorRetry(
+                  error: e,
+                  onRetry: () => ref.invalidate(rankingTopProvider),
+                ),
               ),
               data: (users) {
                 if (users.isEmpty) {
                   return const Padding(
-                    padding: EdgeInsets.all(40),
-                    child: Center(child: Text('Sin usuarios para mostrar')),
+                    padding: EdgeInsets.all(20),
+                    child: EmptyState(
+                      icon: Icons.leaderboard_outlined,
+                      title: 'Sin usuarios para mostrar',
+                      subtitle: 'Cambia de filtro o vuelve mas tarde.',
+                    ),
                   );
                 }
                 return Column(

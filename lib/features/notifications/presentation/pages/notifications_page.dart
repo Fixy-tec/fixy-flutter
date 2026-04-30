@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../core/utils/time_ago.dart';
 import '../../../../shared/models/app_notification.dart';
+import '../../../../shared/widgets/empty_state.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../providers/notifications_providers.dart';
 
@@ -35,17 +36,13 @@ class NotificationsPage extends ConsumerWidget {
       ),
       body: async.when(
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('Error: $e')),
+        error: (e, st) => ErrorRetry(error: e),
         data: (items) {
           if (items.isEmpty) {
-            return const Center(
-              child: Padding(
-                padding: EdgeInsets.all(32),
-                child: Text(
-                  'Aun no tienes notificaciones',
-                  textAlign: TextAlign.center,
-                ),
-              ),
+            return const EmptyState(
+              icon: Icons.notifications_none,
+              title: 'Sin notificaciones',
+              subtitle: 'Te avisaremos cuando ocurra algo relevante.',
             );
           }
           return ListView.separated(

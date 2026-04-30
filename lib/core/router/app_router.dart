@@ -11,6 +11,7 @@ import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/applications/presentation/pages/request_detail_page.dart';
 import '../../features/feed/presentation/pages/feed_page.dart';
+import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/ranking/presentation/pages/ranking_page.dart';
 import '../../features/requests/presentation/pages/create_request_page.dart';
@@ -73,6 +74,11 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder: (context, state) =>
             RequestDetailPage(requestId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/notifications',
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) => const NotificationsPage(),
       ),
       StatefulShellRoute.indexedStack(
         builder: (context, state, shell) => AppShell(navigationShell: shell),

@@ -11,6 +11,8 @@ import '../../../../shared/widgets/medal_badge.dart';
 import '../../../../shared/widgets/tag_chip.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
 import '../../../feed/presentation/providers/feed_providers.dart';
+import '../../../ratings/presentation/providers/ratings_providers.dart';
+import '../../../ratings/presentation/widgets/rating_sheet.dart';
 import '../../../requests/presentation/providers/requests_providers.dart';
 import '../../../requests/presentation/widgets/status_chip.dart';
 import '../providers/applications_providers.dart';
@@ -58,6 +60,8 @@ class RequestDetailPage extends ConsumerWidget {
                 const SizedBox(height: 8),
                 Text(request.description),
                 const SizedBox(height: 20),
+                if (request.status == RequestStatus.completada)
+                  _RatingPanel(request: request),
                 if (isCreator)
                   _CreatorView(request: request)
                 else
@@ -415,6 +419,107 @@ class _ApplicantView extends ConsumerWidget {
           ],
         );
       },
+    );
+  }
+}
+
+// ============================================================
+// Panel de calificacion (cuando el request esta completado)
+// ============================================================
+class _RatingPanel extends ConsumerWidget {
+  const _RatingPanel({required this.request});
+  final RequestSummary request;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lookup = CounterpartLookup(
+      requestId: request.id,
+      creatorId: request.creator.id,
+    );
+    final counterpartAsync = ref.watch(counterpartIdProvider(lookup));
+
+    return counterpartAsync.when(
+      loading: () => const SizedBox.shrink(),
+      error: (e, st) => const SizedBox.shrink(),
+      data: (counterpartId) {
+        if (counterpartId == null) return const SizedBox.shrink();
+        final hasRatedAsync = ref.watch(hasRatedProvider(
+          RatingExistsLookup(requestId: request.id, ratedId: counterpartId),
+        ));
+        return hasRatedAsync.when(
+          loading: () => const SizedBox.shrink(),
+          error: (e, st) => const SizedBox.shrink(),
+          data: (alreadyRated) {
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 16),
+              child: Card(
+                color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                child: Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Solicitud completada',
+                        style: TextStyle(fontWeight: FontWeight.w700),
+                      ),
+                      const SizedBox(height: 8),
+                      if (alreadyRated)
+                        Row(
+                          children: [
+                            const Icon(Icons.check_circle, size: 18),
+                            const SizedBox(width: 6),
+                            Text(
+                              'Ya calificaste',
+                              style: Theme.of(context).textTheme.bodyMedium,
+                            ),
+                          ],
+                        )
+                      else
+                        FilledButton.icon(
+                          onPressed: () => _openRating(
+                            context,
+                            ref,
+                            counterpartId,
+                          ),
+                          icon: const Icon(Icons.star_outline),
+                          label: const Text('Calificar'),
+                        ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  Future<void> _openRating(
+    BuildContext context,
+    WidgetRef ref,
+    String counterpartId,
+  ) async {
+    // Necesitamos el nombre del rated para mostrarlo en el sheet.
+    String ratedName = 'usuario';
+    if (counterpartId == request.creator.id) {
+      ratedName = request.creator.fullName;
+    } else {
+      final applicants = await ref
+          .read(applicationsRepositoryProvider)
+          .listForRequest(request.id);
+      final match =
+          applicants.where((a) => a.applicantId == counterpartId).firstOrNull;
+      if (match != null) ratedName = match.fullName;
+    }
+
+    if (!context.mounted) return;
+    await RatingSheet.show(
+      context,
+      requestId: request.id,
+      ratedId: counterpartId,
+      ratedName: ratedName,
     );
   }
 }

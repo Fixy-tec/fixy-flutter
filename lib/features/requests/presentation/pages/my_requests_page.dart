@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/models/application_summary.dart';
 import '../../../../shared/models/request_summary.dart';
 import '../../../../shared/widgets/request_card.dart';
+import '../../../ratings/presentation/providers/ratings_providers.dart';
 import '../providers/requests_providers.dart';
 import '../widgets/status_chip.dart';
 
@@ -255,10 +256,118 @@ class _CompletedTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final async = ref.watch(myCompletedProvider);
-    return _SimpleRequestList(
-      async: async,
-      emptyText: 'Aun no has completado solicitudes',
-      onRefresh: () => ref.refresh(myCompletedProvider.future),
+    return RefreshIndicator(
+      onRefresh: () async => ref.refresh(myCompletedProvider.future),
+      child: async.when(
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, st) => _ErrorView(error: e),
+        data: (items) {
+          if (items.isEmpty) {
+            return const _EmptyView(text: 'Aun no has completado solicitudes');
+          }
+          return ListView.separated(
+            padding: const EdgeInsets.all(16),
+            itemCount: items.length,
+            separatorBuilder: (context, i) => const SizedBox(height: 12),
+            itemBuilder: (context, i) => _CompletedCard(request: items[i]),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _CompletedCard extends ConsumerWidget {
+  const _CompletedCard({required this.request});
+  final RequestSummary request;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final lookup = CounterpartLookup(
+      requestId: request.id,
+      creatorId: request.creator.id,
+    );
+    final counterpartAsync = ref.watch(counterpartIdProvider(lookup));
+
+    return Card(
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: () => context.push('/requests/${request.id}'),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      request.type == RequestType.proyecto
+                          ? 'Proyecto'
+                          : 'Asesoria',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  StatusChip.request(request.status),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Text(
+                request.title,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+              ),
+              const SizedBox(height: 8),
+              counterpartAsync.when(
+                loading: () => const SizedBox.shrink(),
+                error: (e, st) => const SizedBox.shrink(),
+                data: (counterpartId) {
+                  if (counterpartId == null) return const SizedBox.shrink();
+                  final hasRatedAsync = ref.watch(hasRatedProvider(
+                    RatingExistsLookup(
+                      requestId: request.id,
+                      ratedId: counterpartId,
+                    ),
+                  ));
+                  return hasRatedAsync.when(
+                    loading: () => const SizedBox.shrink(),
+                    error: (e, st) => const SizedBox.shrink(),
+                    data: (rated) => Row(
+                      children: [
+                        Icon(
+                          rated
+                              ? Icons.check_circle_outline
+                              : Icons.star_outline,
+                          size: 16,
+                          color: rated
+                              ? Theme.of(context).colorScheme.primary
+                              : Colors.orangeAccent,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          rated ? 'Ya calificaste' : 'Pendiente de calificar',
+                          style: TextStyle(
+                            color: rated
+                                ? Theme.of(context).colorScheme.onSurfaceVariant
+                                : Colors.orangeAccent,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

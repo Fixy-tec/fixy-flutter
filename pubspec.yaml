@@ -1,7 +1,7 @@
 name: fixy
 description: "Plataforma de asesorias y proyectos para estudiantes Tecsup."
 publish_to: "none"
-version: 1.0.0+1
+version: 1.0.1+2
 
 environment:
   sdk: ^3.11.4
@@ -35,6 +35,13 @@ dependencies:
   intl: ^0.20.1
   url_launcher: ^6.3.1
   flutter_dotenv: ^5.2.1
+
+  # Auto-update via GitHub Releases
+  package_info_plus: ^8.1.1
+  dio: ^5.7.0
+  path_provider: ^2.1.5
+  open_filex: ^4.7.0
+  permission_handler: ^11.3.1
 
   cupertino_icons: ^1.0.8
 

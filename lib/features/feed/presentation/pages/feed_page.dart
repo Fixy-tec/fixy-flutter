@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../../core/update/update_banner.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/request_card.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -28,6 +29,7 @@ class FeedPage extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: _Header(greetingName: userAsync.value?.fullName),
               ),
+              const SliverToBoxAdapter(child: UpdateBanner()),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _FilterBarDelegate(

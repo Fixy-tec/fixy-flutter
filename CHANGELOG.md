@@ -3,6 +3,27 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.0.1] - 2026-05-01
+
+### Fixed
+- **APK release no podia conectarse a Supabase** — faltaban los permisos
+  `INTERNET` y `ACCESS_NETWORK_STATE` en `main/AndroidManifest.xml`
+  (Flutter solo los agrega en debug/profile por defecto)
+
+### Added
+- **Auto-update desde GitHub Releases**: la app revisa al arrancar si hay
+  una version mas nueva en `Fixy-tec/fixy-flutter` releases. Si encuentra
+  una con APK adjunto, muestra un banner sobre el feed con CTA "Descargar
+  e instalar". Tap descarga el APK con barra de progreso y abre el
+  instalador del sistema (el usuario solo confirma).
+- Permisos: `REQUEST_INSTALL_PACKAGES` para instalar APKs
+- Packages: `package_info_plus`, `dio`, `path_provider`, `open_filex`,
+  `permission_handler`
+- **APK firmado con keystore propia** (signing config en
+  `android/app/build.gradle.kts` lee de `key.properties`, ambos en
+  `.gitignore`). Esto permite actualizaciones in-place sin desinstalar y
+  da identidad consistente al desarrollador.
+
 ## [1.0.0] - 2026-04-30
 
 Primera versión estable de Fixy. Implementa el flujo completo end-to-end:

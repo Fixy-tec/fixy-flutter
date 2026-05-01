@@ -2,6 +2,11 @@
 .env
 .env.local
 
+# Android signing - NUNCA commitear claves
+android/key.properties
+android/app/upload-keystore.jks
+*.jks
+
 # Claude Code local settings
 .claude/settings.local.json
 CLAUDE.md

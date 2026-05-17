@@ -20,6 +20,9 @@ docs/_*.py
 docs/avatars/
 docs/medals/
 
+# k6 stress test local (solo evidencia para informe)
+k6_local/
+
 # Miscellaneous
 *.class
 *.log

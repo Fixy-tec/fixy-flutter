@@ -17,6 +17,7 @@ import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/profile/presentation/pages/public_profile_page.dart';
 import '../../features/ranking/presentation/pages/ranking_page.dart';
 import '../../features/requests/presentation/pages/create_request_page.dart';
+import '../../features/requests/presentation/pages/edit_request_page.dart';
 import '../../features/requests/presentation/pages/my_requests_page.dart';
 import '../../features/search/presentation/pages/search_page.dart';
 import '../supabase/supabase_client.dart';
@@ -78,6 +79,12 @@ final routerProvider = Provider<GoRouter>((ref) {
         parentNavigatorKey: _rootKey,
         builder: (context, state) =>
             RequestDetailPage(requestId: state.pathParameters['id']!),
+      ),
+      GoRoute(
+        path: '/requests/:id/edit',
+        parentNavigatorKey: _rootKey,
+        builder: (context, state) =>
+            EditRequestPage(requestId: state.pathParameters['id']!),
       ),
       GoRoute(
         path: '/notifications',

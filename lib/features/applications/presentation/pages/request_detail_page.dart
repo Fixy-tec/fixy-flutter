@@ -588,13 +588,23 @@ class _CreatorMenu extends ConsumerWidget {
     if (!_canCancel) return const SizedBox.shrink();
     return PopupMenuButton<String>(
       onSelected: (v) async {
-        if (v == 'cancel') {
+        if (v == 'edit') {
+          context.push('/requests/${request.id}/edit');
+        } else if (v == 'cancel') {
           await _cancel(context, ref);
         } else if (v == 'delete') {
           await _delete(context, ref);
         }
       },
       itemBuilder: (_) => [
+        const PopupMenuItem(
+          value: 'edit',
+          child: ListTile(
+            leading: Icon(Icons.edit_outlined),
+            title: Text('Editar'),
+            contentPadding: EdgeInsets.zero,
+          ),
+        ),
         const PopupMenuItem(
           value: 'cancel',
           child: ListTile(

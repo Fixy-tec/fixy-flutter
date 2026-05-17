@@ -343,10 +343,23 @@ class _CreatedCard extends ConsumerWidget {
                   PopupMenuButton<String>(
                     icon: const Icon(Icons.more_vert, size: 20),
                     onSelected: (v) {
-                      if (v == 'cancel') _onCancel(context, ref);
-                      if (v == 'delete') _onDelete(context, ref);
+                      if (v == 'edit') {
+                        context.push('/requests/${request.id}/edit');
+                      } else if (v == 'cancel') {
+                        _onCancel(context, ref);
+                      } else if (v == 'delete') {
+                        _onDelete(context, ref);
+                      }
                     },
                     itemBuilder: (_) => [
+                      const PopupMenuItem(
+                        value: 'edit',
+                        child: ListTile(
+                          leading: Icon(Icons.edit_outlined),
+                          title: Text('Editar'),
+                          contentPadding: EdgeInsets.zero,
+                        ),
+                      ),
                       const PopupMenuItem(
                         value: 'cancel',
                         child: ListTile(

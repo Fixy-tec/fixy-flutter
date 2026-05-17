@@ -76,6 +76,49 @@ class RequestsRepository {
     return _mapRequestRow(row);
   }
 
+  /// Edita una solicitud existente. Solo el creador puede actualizar.
+  /// La app evita el editado si el status ya paso de 'en_revision'.
+  /// Si tagIds no es null, reemplaza completamente los tags asociados.
+  Future<void> updateRequest({
+    required String requestId,
+    String? title,
+    String? description,
+    int? difficultyLevel,
+    num? economicBenefit,
+    bool clearEconomicBenefit = false,
+    int? participantsNeeded,
+    DateTime? deadline,
+    bool clearDeadline = false,
+    List<String>? tagIds,
+  }) async {
+    final updates = <String, dynamic>{
+      'title': ?title,
+      'description': ?description,
+      'difficulty_level': ?difficultyLevel,
+      'economic_benefit': ?economicBenefit,
+      if (clearEconomicBenefit) 'economic_benefit': null,
+      'participants_needed': ?participantsNeeded,
+      'deadline': ?deadline?.toIso8601String().substring(0, 10),
+      if (clearDeadline) 'deadline': null,
+    };
+    if (updates.isNotEmpty) {
+      await _client.from('requests').update(updates).eq('id', requestId);
+    }
+
+    if (tagIds != null) {
+      // Reemplaza los tags: borrar los actuales e insertar los nuevos.
+      await _client.from('request_tags').delete().eq('request_id', requestId);
+      if (tagIds.isNotEmpty) {
+        await _client.from('request_tags').insert(
+              tagIds
+                  .map((tagId) =>
+                      {'request_id': requestId, 'tag_id': tagId})
+                  .toList(),
+            );
+      }
+    }
+  }
+
   /// Marca la solicitud como completada (solo creador, solo si en proceso).
   Future<void> markCompleted(String requestId) async {
     await _client

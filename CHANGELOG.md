@@ -3,6 +3,27 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.1.6] - 2026-05-17
+
+### Added
+- **Editar solicitud (CRUD completo)**: faltaba la U del CRUD. Ahora el
+  creador de una solicitud puede modificarla mientras esté en estado
+  'abierta' o 'en_revision'. Editable: titulo, descripcion, tags,
+  dificultad, fecha limite, cantidad de participantes y beneficio
+  economico. El tipo (asesoria/proyecto) queda fijo tras la creacion.
+- Nueva pantalla EditRequestPage en `/requests/:id/edit` con todos los
+  campos pre-llenados con los valores actuales.
+- Opcion "Editar" agregada al menu del creador (3 puntitos) tanto en:
+    - RequestDetailPage (cuando es el creador)
+    - MyRequestsPage > pestaña Creadas
+- RequestsRepository: nuevo metodo updateRequest() que acepta solo los
+  campos que cambian. Reemplaza completamente la lista de tags si se
+  proporciona tagIds.
+
+### Improved
+- Usado sintaxis null-aware de Dart 3.7+ (`'key': ?value`) en
+  updateRequest para mapas con valores opcionales — codigo mas limpio.
+
 ## [1.1.5] - 2026-05-17
 
 Iteracion alineada a los requisitos de la Entrega 25% del curso. Agrega

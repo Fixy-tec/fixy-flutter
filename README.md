@@ -12,8 +12,9 @@ Plataforma móvil que conecta estudiantes para resolver necesidades académicas 
 [![Dart](https://img.shields.io/badge/Dart-3.11+-0175C2?logo=dart)](https://dart.dev)
 [![Supabase](https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth-3ECF8E?logo=supabase)](https://supabase.com)
 [![Material 3](https://img.shields.io/badge/UI-Material%203-blue)](https://m3.material.io)
+[![Tests](https://img.shields.io/badge/tests-41%20passed-brightgreen)](#-pruebas)
 [![License](https://img.shields.io/badge/license-Educational-lightgrey)]()
-[![Release](https://img.shields.io/badge/release-v1.0.0-1A4CA3)](https://github.com/Fixy-tec/fixy-flutter/releases)
+[![Release](https://img.shields.io/badge/release-v1.1.5-1A4CA3)](https://github.com/Fixy-tec/fixy-flutter/releases)
 
 </div>
 
@@ -24,22 +25,23 @@ Plataforma móvil que conecta estudiantes para resolver necesidades académicas 
 - [Acerca del proyecto](#-acerca-del-proyecto)
 - [Características](#-características)
 - [Stack tecnológico](#-stack-tecnológico)
-- [Capturas](#-capturas)
 - [Sistema de reputación](#-sistema-de-reputación)
 - [Quick start](#-quick-start)
 - [Estructura del proyecto](#-estructura-del-proyecto)
+- [Pruebas](#-pruebas)
+- [Auto-actualización](#-auto-actualización)
 - [Branding](#-branding)
-- [Roadmap](#️-roadmap)
+- [Roadmap](#-roadmap)
 - [Licencia](#-licencia)
 
 ---
 
 ## 🎯 Acerca del proyecto
 
-**Fixy** es una app móvil multiplataforma (Android + iOS) diseñada como proyecto final del curso **Aplicaciones Móviles Multiplataforma — Tecsup 2026-1**. Permite a estudiantes de Tecsup publicar dos tipos de solicitudes:
+**Fixy** es una app móvil multiplataforma (Android + iOS) desarrollada como proyecto final del curso **Aplicaciones Móviles Multiplataforma — Tecsup 2026-1**. Permite a estudiantes de Tecsup publicar dos tipos de solicitudes:
 
-- 🎓 **Asesorías** — buscar a alguien que ayude con un curso, tema o proyecto
-- 🤝 **Proyectos** — buscar socios para desarrollar algo en conjunto
+- 🎓 **Asesorías** — buscar a alguien que ayude con un curso, tema o proyecto.
+- 🤝 **Proyectos** — buscar socios para desarrollar algo en conjunto.
 
 Otros estudiantes pueden postular, el creador selecciona, se desbloquea el contacto por WhatsApp y al finalizar ambas partes se califican mutuamente, ganando puntos para subir de medalla al estilo *League of Legends*.
 
@@ -48,18 +50,18 @@ Otros estudiantes pueden postular, el creador selecciona, se desbloquea el conta
 ## ✨ Características
 
 ### Autenticación
-- Registro con email institucional `@tecsup.edu.pe` (validado en cliente, en `CHECK constraint` y en trigger)
+- Registro multi-step de **5 pasos** con email institucional `@tecsup.edu.pe`
+- Validación en 3 capas: cliente, CHECK constraint y trigger SQL
 - Persistencia de sesión vía Supabase Auth con flow PKCE
 
 ### Solicitudes
-- Feed con filtros: **Todo**, **Asesorías**, **Proyectos**, **Recomendados** (intersección de tags)
-- Crear con tipo, dificultad 1-5, tags, beneficio S/, fecha límite, cantidad de participantes
+- Feed (Dashboard) con welcome card, actividad reciente y noticias
+- Tab **Buscar** dedicada con chips horizontales (Todo / Asesorías / Proyectos / Recomendados) y filtros expandibles (compensación, dificultad, tags)
+- Creación multi-step en **3 pasos** con resumen en vivo
 - **Cancelar** o **eliminar** solicitudes propias antes de tener postulantes
-- Pull-to-refresh y empty/error states pulidos
 
 ### Postulaciones
-- Postularse con mensaje de presentación (300 chars máx)
-- Vista del creador con lista de postulantes (medalla, rating, mensaje)
+- Postularse con mensaje de presentación (300 chars)
 - Aprobar / rechazar / **retirar** postulación
 - Una sola postulación aprobada por solicitud (validado en trigger SQL)
 
@@ -73,23 +75,36 @@ Otros estudiantes pueden postular, el creador selecciona, se desbloquea el conta
 - Trigger SQL aplica los puntos automáticamente y dispara cambio de medalla
 
 ### Perfil
-- Propio editable: bio, carrera, ciclo, portfolio, LinkedIn, WhatsApp, especialidades
+- 6 **avatares Fixo** (artista, cyborg, hacker, karateka, emprendedor, pirata)
+- Propio editable: bio, carrera, ciclo, portfolio, LinkedIn, GitHub, WhatsApp, especialidades
 - Público de cualquier usuario (read-only) con todos sus stats
 - Progreso visual a la siguiente medalla
 
 ### Ranking
-- Tabla de líderes global y por área (Flutter, Redes, Matemáticas, etc.)
-- Tu posición + delta semanal + medalla
-- Podio con colores oro/plata/bronce
+- Tabla de líderes con card "Tu rango actual" + medalla circular grande
+- Row horizontal con todas las medallas (Hierro→Challenger)
+- Filtro por medalla
+- Podio con colores oro/plata/bronce para top 3
 
 ### Notificaciones
-- In-app con **realtime de Supabase** (badge en vivo en la campana del feed)
+- In-app con **realtime de Supabase** (badge en vivo en la campana del Dashboard)
 - 7 tipos: nueva postulación, aprobada, rechazada, completada, tag-match, recordatorio, cambio de medalla
 - Marcar leídas individualmente o todas; tap navega al request relacionado
 
+### Auto-actualización
+- Banner integrado en el Dashboard cuando hay nueva versión en GitHub Releases
+- Pantalla full-screen de descarga con barra de progreso
+- Sin necesidad de Play Store
+
 ### Cron jobs (pg_cron)
-- **Auto-rating de 3★** tras 7 días sin calificar (no bloquea el flujo)
+- **Auto-rating de 3★** tras 7 días sin calificar
 - **Recordatorio de fecha límite** 24h antes
+
+### Calidad
+- **41 pruebas unitarias** (validators, reputación, comparación de versiones, formato de tiempo)
+- **Vista 404** integrada en `go_router.errorBuilder`
+- **Stress test** propio en `tool/stress_test.dart` (300 req, 0 errores en benchmarks)
+- `flutter analyze`: 0 errores en todas las versiones publicadas
 
 ---
 
@@ -97,31 +112,19 @@ Otros estudiantes pueden postular, el creador selecciona, se desbloquea el conta
 
 | Capa | Tecnología |
 |---|---|
-| **UI Framework** | Flutter 3.41+ / Dart 3.11+ con Material 3 |
+| **UI Framework** | Flutter 3.41 / Dart 3.11 con Material 3 |
 | **Backend** | Supabase (Auth + Postgres + Realtime + RLS + pg_cron) |
 | **State management** | flutter_riverpod 2.x |
-| **Routing** | go_router 14.x con `StatefulShellRoute` |
-| **Modelos** | freezed + json_serializable (codegen) |
+| **Routing** | go_router 14.x con `StatefulShellRoute` (5 tabs + errorBuilder) |
+| **Modelos** | freezed 3.x + json_serializable (codegen) |
 | **HTTP/SDK** | supabase_flutter (cliente oficial) |
+| **Auto-updater** | package_info_plus + dio + open_filex + path_provider |
+| **Firma APK** | Keystore propia (upload-keystore.jks) |
 | **Tipografía** | Google Fonts (Inter) |
 | **Localización** | intl con locale español |
-| **Otros** | url_launcher, flutter_dotenv, cached_network_image |
+| **Otros** | url_launcher, flutter_dotenv, flutter_launcher_icons |
 
 > **Decisión de diseño**: la lógica crítica de reputación (cálculo de puntos, cambio de medalla, auto-rating, validaciones de negocio) vive en **triggers SQL con `SECURITY DEFINER`**, no en Dart. Esto evita que un cliente malicioso manipule la reputación.
-
----
-
-## 📱 Capturas
-
-| Login | Feed | Crear solicitud |
-|---|---|---|
-| ![Login](Prototipo/1.png) | ![Feed](Prototipo/1.png) | ![Crear](Prototipo/2.png) |
-
-| Mis solicitudes | Ranking | Perfil | Notificaciones |
-|---|---|---|---|
-| ![Mis](Prototipo/3.png) | ![Ranking](Prototipo/4.png) | ![Perfil](Prototipo/5.png) | ![Notif](Prototipo/6.png) |
-
-> Las imágenes corresponden al prototipo inicial. La implementación real respeta la estructura y mejora el diseño con Material 3.
 
 ---
 
@@ -151,13 +154,13 @@ Otros estudiantes pueden postular, el creador selecciona, se desbloquea el conta
 
 | Medalla | Rango |
 |---|---|
-| 🛡️ Hierro | 0 – 299 |
-| 🥉 Bronce | 300 – 799 |
-| 🥈 Plata | 800 – 1799 |
-| 🥇 Oro | 1800 – 3499 |
-| 💎 Diamante | 3500 – 5999 |
-| 👑 Maestro | 6000 – 9999 |
-| ⚔️ Challenger | 10000+ |
+| Hierro | 0 – 299 |
+| Bronce | 300 – 799 |
+| Plata | 800 – 1799 |
+| Oro | 1800 – 3499 |
+| Diamante | 3500 – 5999 |
+| Maestro | 6000 – 9999 |
+| Challenger | 10000+ |
 
 > Las medallas pueden **bajar** si el usuario acumula penalizaciones, igual que en LoL/Valorant.
 
@@ -184,19 +187,12 @@ dart run build_runner build --delete-conflicting-outputs
 ### 2. Configurar Supabase
 
 1. Crea un proyecto en [supabase.com](https://supabase.com).
-2. **SQL Editor** → ejecuta los archivos de [`supabase/migrations/`](supabase/migrations/) en orden:
-   1. `01_schema.sql` — tablas + enums (10 tablas)
-   2. `02_functions.sql` — funciones de negocio
-   3. `03_triggers.sql` — triggers automáticos
-   4. `04_rls.sql` — Row Level Security
-   5. `05_seed.sql` — catálogo de tags
-   6. `06_seed_demo.sql` *(opcional)* — 5 usuarios + 8 solicitudes de demo
-   7. `07_cron.sql` — jobs diarios (requiere `pg_cron`)
-3. **Authentication → Providers → Email**: enable Email, desactivar "Confirm email" en desarrollo.
+2. **SQL Editor** → ejecuta los 8 archivos de [`supabase/migrations/`](supabase/migrations/) en orden.
+3. **Authentication → Providers → Email**: enable, desactivar "Confirm email" para desarrollo.
 4. **Database → Extensions**: habilitar `pg_cron`.
 5. **Database → Replication**: habilitar Realtime en `notifications`, `applications`, `requests`.
 
-> Pasos detallados en [`supabase/README.md`](supabase/README.md).
+> Detalles paso a paso en [`supabase/README.md`](supabase/README.md).
 
 ### 3. Configurar variables de entorno
 
@@ -204,23 +200,42 @@ dart run build_runner build --delete-conflicting-outputs
 cp .env.example .env
 ```
 
-Y reemplaza con los valores de **Project Settings → API** en Supabase:
+Reemplaza con los valores de **Project Settings → API** en Supabase:
 
 ```env
 SUPABASE_URL=https://xxxxxxxxxxxxx.supabase.co
 SUPABASE_ANON_KEY=eyJhbGc...
 ```
 
-### 4. Generar íconos del launcher (opcional)
-
-```bash
-dart run flutter_launcher_icons
-```
-
-### 5. Correr la app
+### 4. Correr la app
 
 ```bash
 flutter run
+```
+
+### 5. Compilar APK release (opcional)
+
+Necesitas generar tu propia keystore primero:
+
+```bash
+keytool -genkey -v -keystore android/app/upload-keystore.jks \
+  -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+```
+
+Luego crea `android/key.properties`:
+
+```
+storePassword=<tu password>
+keyPassword=<tu password>
+keyAlias=upload
+storeFile=upload-keystore.jks
+```
+
+Y compila:
+
+```bash
+flutter build apk --release
+# Output: build/app/outputs/flutter-apk/app-release.apk
 ```
 
 #### Usuarios demo
@@ -244,35 +259,106 @@ fixy-flutter/
 ├── lib/
 │   ├── core/
 │   │   ├── theme/        # AppColors + AppTheme M3
-│   │   ├── router/       # go_router + AppShell
+│   │   ├── router/       # go_router + AppShell + 404
 │   │   ├── supabase/     # cliente singleton
-│   │   ├── constants/    # reputation.dart (espejo UI de SQL)
+│   │   ├── constants/    # reputation.dart + avatars.dart
+│   │   ├── update/       # auto-updater (UpdateChecker, UpdateBanner)
 │   │   └── utils/        # validators, time_ago, whatsapp_launcher
 │   ├── features/
-│   │   ├── auth/         # login, registro, sesión
-│   │   ├── feed/         # inicio con filtros + realtime
-│   │   ├── requests/     # crear + mis solicitudes (4 tabs)
+│   │   ├── auth/         # login, registro multi-step, sesión
+│   │   ├── dashboard/    # Inicio con welcome + actividad reciente
+│   │   ├── feed/         # repositorio legacy del feed
+│   │   ├── search/       # tab Buscar con filtros
+│   │   ├── requests/     # crear (3 pasos) + mis solicitudes (4 tabs)
 │   │   ├── applications/ # detalle + postular + aprobar
 │   │   ├── ratings/      # calificaciones (5 estrellas)
 │   │   ├── profile/      # propio editable + público read-only
-│   │   ├── ranking/      # tabla de líderes con filtros
-│   │   └── notifications/# stream realtime
+│   │   ├── ranking/      # tabla con filtro por medalla
+│   │   ├── notifications/# stream realtime
+│   │   └── error/        # NotFoundPage (404)
 │   ├── shared/
-│   │   ├── widgets/      # MedalBadge, TagChip, RequestCard, EmptyState
+│   │   ├── widgets/      # UserAvatar, MedalImage, RequestCard, EmptyState
 │   │   └── models/       # entidades freezed compartidas
 │   ├── app.dart
 │   └── main.dart
+├── test/                 # 41 pruebas unitarias
+│   └── core/
+│       ├── utils/        # validators_test, time_ago_test
+│       ├── constants/    # reputation_test
+│       └── update/       # update_info_test
+├── tool/
+│   └── stress_test.dart  # benchmark contra Supabase
 ├── supabase/
-│   ├── migrations/       # 7 SQL files (idempotentes, en orden)
+│   ├── migrations/       # 8 SQL files (idempotentes)
 │   └── README.md
 ├── assets/
-│   ├── logo.png          # logo wordmark con fondo transparente
-│   └── icon_foreground.png # mascota Fixo para launcher
+│   ├── logo.png
+│   ├── icon_foreground.png
+│   ├── avatars/          # 6 PNGs (Fixo en distintos roles)
+│   └── medals/           # 7 PNGs (Hierro→Challenger)
 ├── android/ ios/
 └── pubspec.yaml
 ```
 
-> **Convención**: estructura por features, capas (`data/domain/presentation`) solo cuando aportan valor. Riverpod para DI; Supabase Auth maneja sesión.
+---
+
+## 🧪 Pruebas
+
+### Pruebas unitarias (41 tests)
+
+```bash
+flutter test
+```
+
+Cubren:
+
+- **validators**: email Tecsup, contraseña mínima, campos requeridos (15 tests)
+- **reputación**: asignación de medallas por puntos, basePointsByLevel, consistencia del ladder (12 tests)
+- **update_info**: comparación semver con prefijos `v` y sufijos `+N`/`-beta` (9 tests)
+- **time_ago**: formato relativo en español (8 tests)
+
+### Stress test
+
+```bash
+dart run tool/stress_test.dart --n 100
+```
+
+Ejecuta 100 peticiones concurrentes contra los endpoints reales de Supabase en 3 escenarios. Resultados en [`docs/STRESS_TEST_RESULTS.md`](docs/STRESS_TEST_RESULTS.md).
+
+### Análisis estático
+
+```bash
+flutter analyze
+```
+
+0 errores y 0 warnings en todas las versiones publicadas (v1.0.0 a v1.1.5).
+
+---
+
+## 🔄 Auto-actualización
+
+La app **no necesita Play Store** para distribuir nuevas versiones. Cuando publiques una release en GitHub con un APK adjunto, los usuarios con la app instalada verán automáticamente:
+
+1. Banner azul en el Dashboard: *"Nueva versión v1.1.X disponible"*
+2. Tap → diálogo con release notes
+3. Tap **Descargar** → pantalla full-screen con barra de progreso
+4. Al terminar → Android pide confirmar instalación
+5. App actualizada sin perder sesión ni datos locales
+
+Workflow para sacar una nueva release:
+
+```bash
+# 1. Bumpear version en pubspec.yaml
+# 2. Build APK firmado
+flutter build apk --release
+cp build/app/outputs/flutter-apk/app-release.apk build/Fixy-X.Y.Z.apk
+
+# 3. Tag + push
+git tag -a vX.Y.Z -m "vX.Y.Z - descripción"
+git push origin vX.Y.Z
+
+# 4. En GitHub web: New Release con el tag, adjuntar el APK
+```
 
 ---
 
@@ -288,36 +374,42 @@ fixy-flutter/
 | 🔴 Points negative | `#D64545` | Puntos perdidos, "Rechazado" |
 | 🟡 Warning | `#E6B800` | "Pendiente", recordatorios |
 
-Toda la UI usa `ColorScheme.fromSeed(#1A4CA3)` para cohesión Material 3 en modo claro y oscuro.
+Toda la UI usa `ColorScheme.fromSeed(#1A4CA3)` para cohesión Material 3 en modo claro y oscuro (respeta el ajuste del dispositivo).
 
-### Logo
+### Logo y mascota
 
-El logo es un birrete de graduación con flecha hacia arriba (símbolo de progreso académico), en gradiente brand. La mascota es **Fixo**, un robot estudiante usado como icono del launcher con fondo `#1A4CA3`.
+- **Logo**: birrete de graduación con flecha hacia arriba (símbolo de progreso académico), en gradiente brand.
+- **Mascota Fixo**: robot estudiante usado como icono del launcher (fondo `#1A4CA3`) y como avatares de perfil en 6 variantes.
 
 ---
 
-## 🛣️ Roadmap
+## 🛣 Roadmap
 
-Implementado en v1.0.0:
+Implementado hasta v1.1.5:
 
 - [x] Autenticación con email Tecsup
-- [x] Feed con filtros + recomendados
+- [x] Registro multi-step + selección de avatar
+- [x] Dashboard con welcome y actividad reciente
+- [x] Tab Buscar dedicada con filtros
 - [x] Crear / cancelar / eliminar solicitudes
 - [x] Postulaciones con aprobar / rechazar / retirar
 - [x] WhatsApp deeplink
 - [x] Sistema de calificaciones mutuas
 - [x] Medallas Hierro → Challenger con cambios automáticos
-- [x] Ranking global y por área
+- [x] Ranking con filtro por medalla
 - [x] Perfil propio + público
 - [x] Notificaciones in-app realtime
 - [x] Cron jobs (auto-rating + deadline reminders)
+- [x] Auto-updater desde GitHub Releases
+- [x] Vista 404
+- [x] 41 pruebas unitarias
+- [x] Stress test propio
 
 Backlog para futuras versiones:
 
 - [ ] Sistema de pagos integrado (Yape/Plin/Stripe)
 - [ ] Multi-institución (UCSM, UCSP, UNSA)
 - [ ] Verificación de identidad con carnet
-- [ ] Filtros avanzados de búsqueda
 - [ ] Reportes de usuarios + moderación
 - [ ] Insignias por logros (no solo medallas por puntos)
 - [ ] Notificaciones push (FCM)

@@ -145,17 +145,22 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
                     borderRadius: BorderRadius.circular(40),
                     child: Container(
                       width: 80,
+                      height: 80,
                       decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.surfaceContainerHighest,
+                        shape: BoxShape.circle,
                         border: Border.all(
                           color: sel
                               ? Theme.of(context).colorScheme.primary
                               : Theme.of(context).colorScheme.outlineVariant,
                           width: sel ? 2.5 : 1,
                         ),
-                        borderRadius: BorderRadius.circular(40),
                       ),
+                      clipBehavior: Clip.antiAlias,
                       padding: const EdgeInsets.all(4),
-                      child: Image.asset(a.assetPath, fit: BoxFit.contain),
+                      child: ClipOval(
+                        child: Image.asset(a.assetPath, fit: BoxFit.cover),
+                      ),
                     ),
                   );
                 },

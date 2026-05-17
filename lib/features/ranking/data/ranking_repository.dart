@@ -15,7 +15,7 @@ class RankingRepository {
     if (tagSlug == null) {
       final rows = await _client
           .from('profiles')
-          .select('id, full_name, avatar_url, total_points, medal')
+          .select('id, full_name, avatar_url, avatar_slug, total_points, medal')
           .order('total_points', ascending: false)
           .limit(limit);
       return _withRank(rows);
@@ -32,7 +32,7 @@ class RankingRepository {
         .from('user_tags')
         .select('''
           user:profiles!user_tags_user_id_fkey
-            (id, full_name, avatar_url, total_points, medal)
+            (id, full_name, avatar_url, avatar_slug, total_points, medal)
         ''')
         .eq('tag_id', tag['id'] as String);
 
@@ -53,6 +53,7 @@ class RankingRepository {
         id: r['id'] as String,
         fullName: r['full_name'] as String,
         avatarUrl: r['avatar_url'] as String?,
+        avatarSlug: r['avatar_slug'] as String?,
         totalPoints: r['total_points'] as int,
         medal: Medal.values.firstWhere(
           (m) => m.name == (r['medal'] as String? ?? 'hierro'),

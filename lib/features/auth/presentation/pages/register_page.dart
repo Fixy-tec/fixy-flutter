@@ -517,6 +517,7 @@ class _Step2Avatar extends StatelessWidget {
                 borderRadius: BorderRadius.circular(16),
                 child: Container(
                   decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.surfaceContainerHighest,
                     border: Border.all(
                       color: isSel
                           ? Theme.of(context).colorScheme.primary
@@ -525,20 +526,29 @@ class _Step2Avatar extends StatelessWidget {
                     ),
                     borderRadius: BorderRadius.circular(16),
                   ),
-                  padding: const EdgeInsets.all(8),
+                  clipBehavior: Clip.antiAlias,
                   child: Stack(
                     children: [
-                      Center(
-                        child: Image.asset(a.assetPath, fit: BoxFit.contain),
+                      Positioned.fill(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Image.asset(a.assetPath, fit: BoxFit.contain),
+                        ),
                       ),
                       if (isSel)
                         Positioned(
-                          top: 0,
-                          right: 0,
-                          child: Icon(
-                            Icons.check_circle,
-                            color: Theme.of(context).colorScheme.primary,
-                            size: 22,
+                          top: 4,
+                          right: 4,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.check_circle,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 22,
+                            ),
                           ),
                         ),
                     ],

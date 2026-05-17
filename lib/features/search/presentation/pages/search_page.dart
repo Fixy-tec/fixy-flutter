@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_colors.dart';
-import '../../../../shared/models/request_summary.dart';
 import '../../../../shared/widgets/empty_state.dart';
 import '../../../../shared/widgets/request_card.dart';
 import '../../../requests/presentation/providers/requests_providers.dart';
@@ -48,6 +47,15 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   showFilters: _showFilters,
                   onToggleFilters: () =>
                       setState(() => _showFilters = !_showFilters),
+                ),
+              ),
+              SliverToBoxAdapter(
+                child: _ScopeChips(
+                  scope: filters.scope,
+                  onChanged: (s) {
+                    ref.read(searchFiltersProvider.notifier).state =
+                        filters.copyWith(scope: s);
+                  },
                 ),
               ),
               if (_showFilters)
@@ -231,21 +239,6 @@ class _FiltersPanel extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: _FilterColumn(
-                      title: 'TIPO',
-                      options: const [
-                        (null, 'Todos'),
-                        (RequestType.asesoria, 'Asesoria'),
-                        (RequestType.proyecto, 'Proyecto'),
-                      ],
-                      selected: filters.type,
-                      onSelected: (v) {
-                        ref.read(searchFiltersProvider.notifier).state =
-                            filters.copyWith(type: v as RequestType?);
-                      },
-                    ),
-                  ),
-                  Expanded(
-                    child: _FilterColumn(
                       title: 'COMPENSACION',
                       options: const [
                         (null, 'Todos'),
@@ -384,6 +377,52 @@ class _FilterColumn extends StatelessWidget {
           );
         }),
       ],
+    );
+  }
+}
+
+// ============================================================
+// Chips horizontales: Todo / Asesorias / Proyectos / Recomendados
+// ============================================================
+class _ScopeChips extends StatelessWidget {
+  const _ScopeChips({required this.scope, required this.onChanged});
+  final SearchScope scope;
+  final ValueChanged<SearchScope> onChanged;
+
+  static const _items = <(SearchScope, String, IconData)>[
+    (SearchScope.todo, 'Todo', Icons.apps),
+    (SearchScope.asesorias, 'Asesorias', Icons.menu_book_outlined),
+    (SearchScope.proyectos, 'Proyectos', Icons.rocket_launch_outlined),
+    (SearchScope.recomendados, 'Recomendados', Icons.auto_awesome),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 48,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        itemCount: _items.length,
+        separatorBuilder: (c, i) => const SizedBox(width: 8),
+        itemBuilder: (context, i) {
+          final (value, label, icon) = _items[i];
+          final isSel = scope == value;
+          return ChoiceChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(icon, size: 14),
+                const SizedBox(width: 4),
+                Text(label),
+              ],
+            ),
+            selected: isSel,
+            showCheckmark: false,
+            onSelected: (_) => onChanged(value),
+          );
+        },
+      ),
     );
   }
 }

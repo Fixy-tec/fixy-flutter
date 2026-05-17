@@ -617,7 +617,7 @@ class _RankingTile extends StatelessWidget {
           const SizedBox(width: 8),
           UserAvatar(
             fullName: user.fullName,
-            // RankingUser hoy no trae avatarSlug; mostramos iniciales.
+            avatarSlug: user.avatarSlug,
             radius: 18,
           ),
           const SizedBox(width: 10),

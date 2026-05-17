@@ -12,6 +12,7 @@ abstract class RankingUser with _$RankingUser {
     required String id,
     required String fullName,
     String? avatarUrl,
+    String? avatarSlug,
     required int totalPoints,
     @Default(Medal.hierro) Medal medal,
   }) = _RankingUser;

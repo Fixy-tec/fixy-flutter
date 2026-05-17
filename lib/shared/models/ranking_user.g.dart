@@ -11,6 +11,7 @@ _RankingUser _$RankingUserFromJson(Map<String, dynamic> json) => _RankingUser(
   id: json['id'] as String,
   fullName: json['full_name'] as String,
   avatarUrl: json['avatar_url'] as String?,
+  avatarSlug: json['avatar_slug'] as String?,
   totalPoints: (json['total_points'] as num).toInt(),
   medal: $enumDecodeNullable(_$MedalEnumMap, json['medal']) ?? Medal.hierro,
 );
@@ -21,6 +22,7 @@ Map<String, dynamic> _$RankingUserToJson(_RankingUser instance) =>
       'id': instance.id,
       'full_name': instance.fullName,
       'avatar_url': instance.avatarUrl,
+      'avatar_slug': instance.avatarSlug,
       'total_points': instance.totalPoints,
       'medal': _$MedalEnumMap[instance.medal]!,
     };

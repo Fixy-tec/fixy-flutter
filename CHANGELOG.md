@@ -3,6 +3,25 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.1.2] - 2026-05-16
+
+### Fixed
+- **Avatares se salian del circulo en editor de perfil**: el `Container`
+  redondo no recortaba la imagen child; ahora usa `ClipOval` + `shape: circle`
+  con `clipBehavior: antiAlias`.
+- **Avatares en step 2 del registro** con el mismo problema: clip aplicado
+  + check-circle del seleccionado ahora va sobre fondo blanco para que se
+  vea contra el avatar.
+- **Ranking mostraba iniciales en vez del avatar elegido**: agregado
+  `avatarSlug` al modelo `RankingUser` y al SELECT del repository; el tile
+  ahora muestra el avatar Fixo si el usuario eligio uno.
+
+### Added
+- **Buscar: chips horizontales** Todo / Asesorias / Proyectos / Recomendados
+  arriba de los filtros expandibles, como tenia el feed antiguo.
+- "Recomendados" filtra requests cuyos tags coinciden con los del usuario.
+- El filtro "TIPO" se removio del panel expandible (ahora vive como chip).
+
 ## [1.1.1] - 2026-05-16
 
 ### Fixed

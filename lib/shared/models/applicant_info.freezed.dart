@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$ApplicantInfo {
 
- String get applicationId; String get applicantId; String get fullName; String? get avatarUrl; Medal get medal; num get avgRating; int get ratingsCount; int get totalPoints; String? get message; ApplicationStatus get status; String? get whatsappNumber; DateTime get appliedAt;
+ String get applicationId; String get applicantId; String get fullName; String? get avatarUrl; String? get avatarSlug; Medal get medal; num get avgRating; int get ratingsCount; int get totalPoints; String? get message; ApplicationStatus get status; String? get whatsappNumber; DateTime get appliedAt;
 /// Create a copy of ApplicantInfo
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $ApplicantInfoCopyWith<ApplicantInfo> get copyWith => _$ApplicantInfoCopyWithImp
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is ApplicantInfo&&(identical(other.applicationId, applicationId) || other.applicationId == applicationId)&&(identical(other.applicantId, applicantId) || other.applicantId == applicantId)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.medal, medal) || other.medal == medal)&&(identical(other.avgRating, avgRating) || other.avgRating == avgRating)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount)&&(identical(other.totalPoints, totalPoints) || other.totalPoints == totalPoints)&&(identical(other.message, message) || other.message == message)&&(identical(other.status, status) || other.status == status)&&(identical(other.whatsappNumber, whatsappNumber) || other.whatsappNumber == whatsappNumber)&&(identical(other.appliedAt, appliedAt) || other.appliedAt == appliedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is ApplicantInfo&&(identical(other.applicationId, applicationId) || other.applicationId == applicationId)&&(identical(other.applicantId, applicantId) || other.applicantId == applicantId)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.avatarSlug, avatarSlug) || other.avatarSlug == avatarSlug)&&(identical(other.medal, medal) || other.medal == medal)&&(identical(other.avgRating, avgRating) || other.avgRating == avgRating)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount)&&(identical(other.totalPoints, totalPoints) || other.totalPoints == totalPoints)&&(identical(other.message, message) || other.message == message)&&(identical(other.status, status) || other.status == status)&&(identical(other.whatsappNumber, whatsappNumber) || other.whatsappNumber == whatsappNumber)&&(identical(other.appliedAt, appliedAt) || other.appliedAt == appliedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,applicationId,applicantId,fullName,avatarUrl,medal,avgRating,ratingsCount,totalPoints,message,status,whatsappNumber,appliedAt);
+int get hashCode => Object.hash(runtimeType,applicationId,applicantId,fullName,avatarUrl,avatarSlug,medal,avgRating,ratingsCount,totalPoints,message,status,whatsappNumber,appliedAt);
 
 @override
 String toString() {
-  return 'ApplicantInfo(applicationId: $applicationId, applicantId: $applicantId, fullName: $fullName, avatarUrl: $avatarUrl, medal: $medal, avgRating: $avgRating, ratingsCount: $ratingsCount, totalPoints: $totalPoints, message: $message, status: $status, whatsappNumber: $whatsappNumber, appliedAt: $appliedAt)';
+  return 'ApplicantInfo(applicationId: $applicationId, applicantId: $applicantId, fullName: $fullName, avatarUrl: $avatarUrl, avatarSlug: $avatarSlug, medal: $medal, avgRating: $avgRating, ratingsCount: $ratingsCount, totalPoints: $totalPoints, message: $message, status: $status, whatsappNumber: $whatsappNumber, appliedAt: $appliedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $ApplicantInfoCopyWith<$Res>  {
   factory $ApplicantInfoCopyWith(ApplicantInfo value, $Res Function(ApplicantInfo) _then) = _$ApplicantInfoCopyWithImpl;
 @useResult
 $Res call({
- String applicationId, String applicantId, String fullName, String? avatarUrl, Medal medal, num avgRating, int ratingsCount, int totalPoints, String? message, ApplicationStatus status, String? whatsappNumber, DateTime appliedAt
+ String applicationId, String applicantId, String fullName, String? avatarUrl, String? avatarSlug, Medal medal, num avgRating, int ratingsCount, int totalPoints, String? message, ApplicationStatus status, String? whatsappNumber, DateTime appliedAt
 });
 
 
@@ -65,12 +65,13 @@ class _$ApplicantInfoCopyWithImpl<$Res>
 
 /// Create a copy of ApplicantInfo
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? applicationId = null,Object? applicantId = null,Object? fullName = null,Object? avatarUrl = freezed,Object? medal = null,Object? avgRating = null,Object? ratingsCount = null,Object? totalPoints = null,Object? message = freezed,Object? status = null,Object? whatsappNumber = freezed,Object? appliedAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? applicationId = null,Object? applicantId = null,Object? fullName = null,Object? avatarUrl = freezed,Object? avatarSlug = freezed,Object? medal = null,Object? avgRating = null,Object? ratingsCount = null,Object? totalPoints = null,Object? message = freezed,Object? status = null,Object? whatsappNumber = freezed,Object? appliedAt = null,}) {
   return _then(_self.copyWith(
 applicationId: null == applicationId ? _self.applicationId : applicationId // ignore: cast_nullable_to_non_nullable
 as String,applicantId: null == applicantId ? _self.applicantId : applicantId // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
+as String?,avatarSlug: freezed == avatarSlug ? _self.avatarSlug : avatarSlug // ignore: cast_nullable_to_non_nullable
 as String?,medal: null == medal ? _self.medal : medal // ignore: cast_nullable_to_non_nullable
 as Medal,avgRating: null == avgRating ? _self.avgRating : avgRating // ignore: cast_nullable_to_non_nullable
 as num,ratingsCount: null == ratingsCount ? _self.ratingsCount : ratingsCount // ignore: cast_nullable_to_non_nullable
@@ -164,10 +165,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String applicationId,  String applicantId,  String fullName,  String? avatarUrl,  Medal medal,  num avgRating,  int ratingsCount,  int totalPoints,  String? message,  ApplicationStatus status,  String? whatsappNumber,  DateTime appliedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String applicationId,  String applicantId,  String fullName,  String? avatarUrl,  String? avatarSlug,  Medal medal,  num avgRating,  int ratingsCount,  int totalPoints,  String? message,  ApplicationStatus status,  String? whatsappNumber,  DateTime appliedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _ApplicantInfo() when $default != null:
-return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avatarUrl,_that.medal,_that.avgRating,_that.ratingsCount,_that.totalPoints,_that.message,_that.status,_that.whatsappNumber,_that.appliedAt);case _:
+return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avatarUrl,_that.avatarSlug,_that.medal,_that.avgRating,_that.ratingsCount,_that.totalPoints,_that.message,_that.status,_that.whatsappNumber,_that.appliedAt);case _:
   return orElse();
 
 }
@@ -185,10 +186,10 @@ return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avata
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String applicationId,  String applicantId,  String fullName,  String? avatarUrl,  Medal medal,  num avgRating,  int ratingsCount,  int totalPoints,  String? message,  ApplicationStatus status,  String? whatsappNumber,  DateTime appliedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String applicationId,  String applicantId,  String fullName,  String? avatarUrl,  String? avatarSlug,  Medal medal,  num avgRating,  int ratingsCount,  int totalPoints,  String? message,  ApplicationStatus status,  String? whatsappNumber,  DateTime appliedAt)  $default,) {final _that = this;
 switch (_that) {
 case _ApplicantInfo():
-return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avatarUrl,_that.medal,_that.avgRating,_that.ratingsCount,_that.totalPoints,_that.message,_that.status,_that.whatsappNumber,_that.appliedAt);case _:
+return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avatarUrl,_that.avatarSlug,_that.medal,_that.avgRating,_that.ratingsCount,_that.totalPoints,_that.message,_that.status,_that.whatsappNumber,_that.appliedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +206,10 @@ return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avata
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String applicationId,  String applicantId,  String fullName,  String? avatarUrl,  Medal medal,  num avgRating,  int ratingsCount,  int totalPoints,  String? message,  ApplicationStatus status,  String? whatsappNumber,  DateTime appliedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String applicationId,  String applicantId,  String fullName,  String? avatarUrl,  String? avatarSlug,  Medal medal,  num avgRating,  int ratingsCount,  int totalPoints,  String? message,  ApplicationStatus status,  String? whatsappNumber,  DateTime appliedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _ApplicantInfo() when $default != null:
-return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avatarUrl,_that.medal,_that.avgRating,_that.ratingsCount,_that.totalPoints,_that.message,_that.status,_that.whatsappNumber,_that.appliedAt);case _:
+return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avatarUrl,_that.avatarSlug,_that.medal,_that.avgRating,_that.ratingsCount,_that.totalPoints,_that.message,_that.status,_that.whatsappNumber,_that.appliedAt);case _:
   return null;
 
 }
@@ -220,13 +221,14 @@ return $default(_that.applicationId,_that.applicantId,_that.fullName,_that.avata
 @JsonSerializable()
 
 class _ApplicantInfo implements ApplicantInfo {
-  const _ApplicantInfo({required this.applicationId, required this.applicantId, required this.fullName, this.avatarUrl, this.medal = Medal.hierro, this.avgRating = 0, this.ratingsCount = 0, this.totalPoints = 0, this.message, required this.status, this.whatsappNumber, required this.appliedAt});
+  const _ApplicantInfo({required this.applicationId, required this.applicantId, required this.fullName, this.avatarUrl, this.avatarSlug, this.medal = Medal.hierro, this.avgRating = 0, this.ratingsCount = 0, this.totalPoints = 0, this.message, required this.status, this.whatsappNumber, required this.appliedAt});
   factory _ApplicantInfo.fromJson(Map<String, dynamic> json) => _$ApplicantInfoFromJson(json);
 
 @override final  String applicationId;
 @override final  String applicantId;
 @override final  String fullName;
 @override final  String? avatarUrl;
+@override final  String? avatarSlug;
 @override@JsonKey() final  Medal medal;
 @override@JsonKey() final  num avgRating;
 @override@JsonKey() final  int ratingsCount;
@@ -249,16 +251,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApplicantInfo&&(identical(other.applicationId, applicationId) || other.applicationId == applicationId)&&(identical(other.applicantId, applicantId) || other.applicantId == applicantId)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.medal, medal) || other.medal == medal)&&(identical(other.avgRating, avgRating) || other.avgRating == avgRating)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount)&&(identical(other.totalPoints, totalPoints) || other.totalPoints == totalPoints)&&(identical(other.message, message) || other.message == message)&&(identical(other.status, status) || other.status == status)&&(identical(other.whatsappNumber, whatsappNumber) || other.whatsappNumber == whatsappNumber)&&(identical(other.appliedAt, appliedAt) || other.appliedAt == appliedAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _ApplicantInfo&&(identical(other.applicationId, applicationId) || other.applicationId == applicationId)&&(identical(other.applicantId, applicantId) || other.applicantId == applicantId)&&(identical(other.fullName, fullName) || other.fullName == fullName)&&(identical(other.avatarUrl, avatarUrl) || other.avatarUrl == avatarUrl)&&(identical(other.avatarSlug, avatarSlug) || other.avatarSlug == avatarSlug)&&(identical(other.medal, medal) || other.medal == medal)&&(identical(other.avgRating, avgRating) || other.avgRating == avgRating)&&(identical(other.ratingsCount, ratingsCount) || other.ratingsCount == ratingsCount)&&(identical(other.totalPoints, totalPoints) || other.totalPoints == totalPoints)&&(identical(other.message, message) || other.message == message)&&(identical(other.status, status) || other.status == status)&&(identical(other.whatsappNumber, whatsappNumber) || other.whatsappNumber == whatsappNumber)&&(identical(other.appliedAt, appliedAt) || other.appliedAt == appliedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,applicationId,applicantId,fullName,avatarUrl,medal,avgRating,ratingsCount,totalPoints,message,status,whatsappNumber,appliedAt);
+int get hashCode => Object.hash(runtimeType,applicationId,applicantId,fullName,avatarUrl,avatarSlug,medal,avgRating,ratingsCount,totalPoints,message,status,whatsappNumber,appliedAt);
 
 @override
 String toString() {
-  return 'ApplicantInfo(applicationId: $applicationId, applicantId: $applicantId, fullName: $fullName, avatarUrl: $avatarUrl, medal: $medal, avgRating: $avgRating, ratingsCount: $ratingsCount, totalPoints: $totalPoints, message: $message, status: $status, whatsappNumber: $whatsappNumber, appliedAt: $appliedAt)';
+  return 'ApplicantInfo(applicationId: $applicationId, applicantId: $applicantId, fullName: $fullName, avatarUrl: $avatarUrl, avatarSlug: $avatarSlug, medal: $medal, avgRating: $avgRating, ratingsCount: $ratingsCount, totalPoints: $totalPoints, message: $message, status: $status, whatsappNumber: $whatsappNumber, appliedAt: $appliedAt)';
 }
 
 
@@ -269,7 +271,7 @@ abstract mixin class _$ApplicantInfoCopyWith<$Res> implements $ApplicantInfoCopy
   factory _$ApplicantInfoCopyWith(_ApplicantInfo value, $Res Function(_ApplicantInfo) _then) = __$ApplicantInfoCopyWithImpl;
 @override @useResult
 $Res call({
- String applicationId, String applicantId, String fullName, String? avatarUrl, Medal medal, num avgRating, int ratingsCount, int totalPoints, String? message, ApplicationStatus status, String? whatsappNumber, DateTime appliedAt
+ String applicationId, String applicantId, String fullName, String? avatarUrl, String? avatarSlug, Medal medal, num avgRating, int ratingsCount, int totalPoints, String? message, ApplicationStatus status, String? whatsappNumber, DateTime appliedAt
 });
 
 
@@ -286,12 +288,13 @@ class __$ApplicantInfoCopyWithImpl<$Res>
 
 /// Create a copy of ApplicantInfo
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? applicationId = null,Object? applicantId = null,Object? fullName = null,Object? avatarUrl = freezed,Object? medal = null,Object? avgRating = null,Object? ratingsCount = null,Object? totalPoints = null,Object? message = freezed,Object? status = null,Object? whatsappNumber = freezed,Object? appliedAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? applicationId = null,Object? applicantId = null,Object? fullName = null,Object? avatarUrl = freezed,Object? avatarSlug = freezed,Object? medal = null,Object? avgRating = null,Object? ratingsCount = null,Object? totalPoints = null,Object? message = freezed,Object? status = null,Object? whatsappNumber = freezed,Object? appliedAt = null,}) {
   return _then(_ApplicantInfo(
 applicationId: null == applicationId ? _self.applicationId : applicationId // ignore: cast_nullable_to_non_nullable
 as String,applicantId: null == applicantId ? _self.applicantId : applicantId // ignore: cast_nullable_to_non_nullable
 as String,fullName: null == fullName ? _self.fullName : fullName // ignore: cast_nullable_to_non_nullable
 as String,avatarUrl: freezed == avatarUrl ? _self.avatarUrl : avatarUrl // ignore: cast_nullable_to_non_nullable
+as String?,avatarSlug: freezed == avatarSlug ? _self.avatarSlug : avatarSlug // ignore: cast_nullable_to_non_nullable
 as String?,medal: null == medal ? _self.medal : medal // ignore: cast_nullable_to_non_nullable
 as Medal,avgRating: null == avgRating ? _self.avgRating : avgRating // ignore: cast_nullable_to_non_nullable
 as num,ratingsCount: null == ratingsCount ? _self.ratingsCount : ratingsCount // ignore: cast_nullable_to_non_nullable

@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$RatingReceived {
 
- String get id; String get raterId; String get raterFullName; Medal get raterMedal; int get stars; String? get comment; DateTime get createdAt;
+ String get id; String get raterId; String get raterFullName; String? get raterAvatarSlug; Medal get raterMedal; int get stars; String? get comment; DateTime get createdAt;
 /// Create a copy of RatingReceived
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $RatingReceivedCopyWith<RatingReceived> get copyWith => _$RatingReceivedCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is RatingReceived&&(identical(other.id, id) || other.id == id)&&(identical(other.raterId, raterId) || other.raterId == raterId)&&(identical(other.raterFullName, raterFullName) || other.raterFullName == raterFullName)&&(identical(other.raterMedal, raterMedal) || other.raterMedal == raterMedal)&&(identical(other.stars, stars) || other.stars == stars)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is RatingReceived&&(identical(other.id, id) || other.id == id)&&(identical(other.raterId, raterId) || other.raterId == raterId)&&(identical(other.raterFullName, raterFullName) || other.raterFullName == raterFullName)&&(identical(other.raterAvatarSlug, raterAvatarSlug) || other.raterAvatarSlug == raterAvatarSlug)&&(identical(other.raterMedal, raterMedal) || other.raterMedal == raterMedal)&&(identical(other.stars, stars) || other.stars == stars)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,raterId,raterFullName,raterMedal,stars,comment,createdAt);
+int get hashCode => Object.hash(runtimeType,id,raterId,raterFullName,raterAvatarSlug,raterMedal,stars,comment,createdAt);
 
 @override
 String toString() {
-  return 'RatingReceived(id: $id, raterId: $raterId, raterFullName: $raterFullName, raterMedal: $raterMedal, stars: $stars, comment: $comment, createdAt: $createdAt)';
+  return 'RatingReceived(id: $id, raterId: $raterId, raterFullName: $raterFullName, raterAvatarSlug: $raterAvatarSlug, raterMedal: $raterMedal, stars: $stars, comment: $comment, createdAt: $createdAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $RatingReceivedCopyWith<$Res>  {
   factory $RatingReceivedCopyWith(RatingReceived value, $Res Function(RatingReceived) _then) = _$RatingReceivedCopyWithImpl;
 @useResult
 $Res call({
- String id, String raterId, String raterFullName, Medal raterMedal, int stars, String? comment, DateTime createdAt
+ String id, String raterId, String raterFullName, String? raterAvatarSlug, Medal raterMedal, int stars, String? comment, DateTime createdAt
 });
 
 
@@ -65,12 +65,13 @@ class _$RatingReceivedCopyWithImpl<$Res>
 
 /// Create a copy of RatingReceived
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? raterId = null,Object? raterFullName = null,Object? raterMedal = null,Object? stars = null,Object? comment = freezed,Object? createdAt = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? raterId = null,Object? raterFullName = null,Object? raterAvatarSlug = freezed,Object? raterMedal = null,Object? stars = null,Object? comment = freezed,Object? createdAt = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,raterId: null == raterId ? _self.raterId : raterId // ignore: cast_nullable_to_non_nullable
 as String,raterFullName: null == raterFullName ? _self.raterFullName : raterFullName // ignore: cast_nullable_to_non_nullable
-as String,raterMedal: null == raterMedal ? _self.raterMedal : raterMedal // ignore: cast_nullable_to_non_nullable
+as String,raterAvatarSlug: freezed == raterAvatarSlug ? _self.raterAvatarSlug : raterAvatarSlug // ignore: cast_nullable_to_non_nullable
+as String?,raterMedal: null == raterMedal ? _self.raterMedal : raterMedal // ignore: cast_nullable_to_non_nullable
 as Medal,stars: null == stars ? _self.stars : stars // ignore: cast_nullable_to_non_nullable
 as int,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
@@ -159,10 +160,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String raterId,  String raterFullName,  Medal raterMedal,  int stars,  String? comment,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String id,  String raterId,  String raterFullName,  String? raterAvatarSlug,  Medal raterMedal,  int stars,  String? comment,  DateTime createdAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _RatingReceived() when $default != null:
-return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterMedal,_that.stars,_that.comment,_that.createdAt);case _:
+return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterAvatarSlug,_that.raterMedal,_that.stars,_that.comment,_that.createdAt);case _:
   return orElse();
 
 }
@@ -180,10 +181,10 @@ return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterMedal,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String raterId,  String raterFullName,  Medal raterMedal,  int stars,  String? comment,  DateTime createdAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String id,  String raterId,  String raterFullName,  String? raterAvatarSlug,  Medal raterMedal,  int stars,  String? comment,  DateTime createdAt)  $default,) {final _that = this;
 switch (_that) {
 case _RatingReceived():
-return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterMedal,_that.stars,_that.comment,_that.createdAt);case _:
+return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterAvatarSlug,_that.raterMedal,_that.stars,_that.comment,_that.createdAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +201,10 @@ return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterMedal,_tha
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String raterId,  String raterFullName,  Medal raterMedal,  int stars,  String? comment,  DateTime createdAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String id,  String raterId,  String raterFullName,  String? raterAvatarSlug,  Medal raterMedal,  int stars,  String? comment,  DateTime createdAt)?  $default,) {final _that = this;
 switch (_that) {
 case _RatingReceived() when $default != null:
-return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterMedal,_that.stars,_that.comment,_that.createdAt);case _:
+return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterAvatarSlug,_that.raterMedal,_that.stars,_that.comment,_that.createdAt);case _:
   return null;
 
 }
@@ -215,12 +216,13 @@ return $default(_that.id,_that.raterId,_that.raterFullName,_that.raterMedal,_tha
 @JsonSerializable()
 
 class _RatingReceived implements RatingReceived {
-  const _RatingReceived({required this.id, required this.raterId, required this.raterFullName, this.raterMedal = Medal.hierro, required this.stars, this.comment, required this.createdAt});
+  const _RatingReceived({required this.id, required this.raterId, required this.raterFullName, this.raterAvatarSlug, this.raterMedal = Medal.hierro, required this.stars, this.comment, required this.createdAt});
   factory _RatingReceived.fromJson(Map<String, dynamic> json) => _$RatingReceivedFromJson(json);
 
 @override final  String id;
 @override final  String raterId;
 @override final  String raterFullName;
+@override final  String? raterAvatarSlug;
 @override@JsonKey() final  Medal raterMedal;
 @override final  int stars;
 @override final  String? comment;
@@ -239,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RatingReceived&&(identical(other.id, id) || other.id == id)&&(identical(other.raterId, raterId) || other.raterId == raterId)&&(identical(other.raterFullName, raterFullName) || other.raterFullName == raterFullName)&&(identical(other.raterMedal, raterMedal) || other.raterMedal == raterMedal)&&(identical(other.stars, stars) || other.stars == stars)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _RatingReceived&&(identical(other.id, id) || other.id == id)&&(identical(other.raterId, raterId) || other.raterId == raterId)&&(identical(other.raterFullName, raterFullName) || other.raterFullName == raterFullName)&&(identical(other.raterAvatarSlug, raterAvatarSlug) || other.raterAvatarSlug == raterAvatarSlug)&&(identical(other.raterMedal, raterMedal) || other.raterMedal == raterMedal)&&(identical(other.stars, stars) || other.stars == stars)&&(identical(other.comment, comment) || other.comment == comment)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,raterId,raterFullName,raterMedal,stars,comment,createdAt);
+int get hashCode => Object.hash(runtimeType,id,raterId,raterFullName,raterAvatarSlug,raterMedal,stars,comment,createdAt);
 
 @override
 String toString() {
-  return 'RatingReceived(id: $id, raterId: $raterId, raterFullName: $raterFullName, raterMedal: $raterMedal, stars: $stars, comment: $comment, createdAt: $createdAt)';
+  return 'RatingReceived(id: $id, raterId: $raterId, raterFullName: $raterFullName, raterAvatarSlug: $raterAvatarSlug, raterMedal: $raterMedal, stars: $stars, comment: $comment, createdAt: $createdAt)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$RatingReceivedCopyWith<$Res> implements $RatingReceivedCo
   factory _$RatingReceivedCopyWith(_RatingReceived value, $Res Function(_RatingReceived) _then) = __$RatingReceivedCopyWithImpl;
 @override @useResult
 $Res call({
- String id, String raterId, String raterFullName, Medal raterMedal, int stars, String? comment, DateTime createdAt
+ String id, String raterId, String raterFullName, String? raterAvatarSlug, Medal raterMedal, int stars, String? comment, DateTime createdAt
 });
 
 
@@ -276,12 +278,13 @@ class __$RatingReceivedCopyWithImpl<$Res>
 
 /// Create a copy of RatingReceived
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? raterId = null,Object? raterFullName = null,Object? raterMedal = null,Object? stars = null,Object? comment = freezed,Object? createdAt = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? raterId = null,Object? raterFullName = null,Object? raterAvatarSlug = freezed,Object? raterMedal = null,Object? stars = null,Object? comment = freezed,Object? createdAt = null,}) {
   return _then(_RatingReceived(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as String,raterId: null == raterId ? _self.raterId : raterId // ignore: cast_nullable_to_non_nullable
 as String,raterFullName: null == raterFullName ? _self.raterFullName : raterFullName // ignore: cast_nullable_to_non_nullable
-as String,raterMedal: null == raterMedal ? _self.raterMedal : raterMedal // ignore: cast_nullable_to_non_nullable
+as String,raterAvatarSlug: freezed == raterAvatarSlug ? _self.raterAvatarSlug : raterAvatarSlug // ignore: cast_nullable_to_non_nullable
+as String?,raterMedal: null == raterMedal ? _self.raterMedal : raterMedal // ignore: cast_nullable_to_non_nullable
 as Medal,stars: null == stars ? _self.stars : stars // ignore: cast_nullable_to_non_nullable
 as int,comment: freezed == comment ? _self.comment : comment // ignore: cast_nullable_to_non_nullable
 as String?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable

@@ -29,26 +29,68 @@ class _SearchPageState extends ConsumerState<SearchPage> {
   Widget build(BuildContext context) {
     final filters = ref.watch(searchFiltersProvider);
     final resultsAsync = ref.watch(searchResultsProvider);
+    final scheme = Theme.of(context).colorScheme;
 
     return Scaffold(
+      appBar: AppBar(title: const Text('Buscar')),
       body: SafeArea(
+        top: false,
         child: RefreshIndicator(
           onRefresh: () async => ref.refresh(searchResultsProvider.future),
           child: CustomScrollView(
             physics: const AlwaysScrollableScrollPhysics(),
             slivers: [
+              // Search bar + filtros button
               SliverToBoxAdapter(
-                child: _Header(
-                  queryCtrl: _queryCtrl,
-                  onQueryChanged: (q) {
-                    ref.read(searchFiltersProvider.notifier).state =
-                        filters.copyWith(query: q);
-                  },
-                  showFilters: _showFilters,
-                  onToggleFilters: () =>
-                      setState(() => _showFilters = !_showFilters),
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _queryCtrl,
+                          onChanged: (q) {
+                            ref.read(searchFiltersProvider.notifier).state =
+                                filters.copyWith(query: q);
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Buscar por titulo, descripcion o tag...',
+                            prefixIcon: const Icon(Icons.search),
+                            suffixIcon: _queryCtrl.text.isNotEmpty
+                                ? IconButton(
+                                    icon: const Icon(Icons.close, size: 18),
+                                    onPressed: () {
+                                      _queryCtrl.clear();
+                                      ref
+                                          .read(searchFiltersProvider.notifier)
+                                          .state = filters.copyWith(query: '');
+                                      setState(() {});
+                                    },
+                                  )
+                                : null,
+                            isDense: true,
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      IconButton.filledTonal(
+                        tooltip: 'Filtros',
+                        onPressed: () =>
+                            setState(() => _showFilters = !_showFilters),
+                        icon: Icon(
+                          _showFilters ? Icons.tune : Icons.tune,
+                          color: _showFilters ? scheme.primary : null,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
+              // Chips horizontales scope
               SliverToBoxAdapter(
                 child: _ScopeChips(
                   scope: filters.scope,
@@ -58,24 +100,28 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                   },
                 ),
               ),
+              // Panel de filtros avanzados (colapsable)
               if (_showFilters)
                 SliverToBoxAdapter(
                   child: _FiltersPanel(filters: filters),
                 ),
+              // Contador
               SliverToBoxAdapter(
                 child: resultsAsync.maybeWhen(
                   data: (items) => Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 4),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 4),
                     child: Text(
                       '${items.length} solicitudes encontradas',
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontSize: 12,
+                        color: scheme.onSurfaceVariant,
                       ),
                     ),
                   ),
                   orElse: () => const SizedBox.shrink(),
                 ),
               ),
+              // Resultados
               resultsAsync.when(
                 loading: () => const SliverFillRemaining(
                   hasScrollBody: false,
@@ -102,7 +148,7 @@ class _SearchPageState extends ConsumerState<SearchPage> {
                     );
                   }
                   return SliverPadding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 96),
+                    padding: const EdgeInsets.fromLTRB(16, 4, 16, 96),
                     sliver: SliverList.separated(
                       itemCount: items.length,
                       separatorBuilder: (c, i) => const SizedBox(height: 12),
@@ -128,97 +174,53 @@ class _SearchPageState extends ConsumerState<SearchPage> {
 }
 
 // ============================================================
-class _Header extends StatelessWidget {
-  const _Header({
-    required this.queryCtrl,
-    required this.onQueryChanged,
-    required this.showFilters,
-    required this.onToggleFilters,
-  });
+// Chips horizontales: Todo / Asesorias / Proyectos / Recomendados
+// ============================================================
+class _ScopeChips extends StatelessWidget {
+  const _ScopeChips({required this.scope, required this.onChanged});
+  final SearchScope scope;
+  final ValueChanged<SearchScope> onChanged;
 
-  final TextEditingController queryCtrl;
-  final ValueChanged<String> onQueryChanged;
-  final bool showFilters;
-  final VoidCallback onToggleFilters;
+  static const _items = <(SearchScope, String, IconData)>[
+    (SearchScope.todo, 'Todo', Icons.apps),
+    (SearchScope.asesorias, 'Asesorias', Icons.menu_book_outlined),
+    (SearchScope.proyectos, 'Proyectos', Icons.rocket_launch_outlined),
+    (SearchScope.recomendados, 'Recomendados', Icons.auto_awesome),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-      child: Container(
-        padding: const EdgeInsets.all(16),
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [AppColors.secondary, AppColors.primary],
-          ),
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Buscar solicitudes',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontWeight: FontWeight.w800,
-              ),
-            ),
-            const SizedBox(height: 4),
-            const Text(
-              'Encuentra asesorias y proyectos que coincidan con tu perfil',
-              style: TextStyle(color: Colors.white70, fontSize: 13),
-            ),
-            const SizedBox(height: 12),
-            Row(
+    return SizedBox(
+      height: 44,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+        itemCount: _items.length,
+        separatorBuilder: (c, i) => const SizedBox(width: 8),
+        itemBuilder: (context, i) {
+          final (value, label, icon) = _items[i];
+          final isSel = scope == value;
+          return ChoiceChip(
+            label: Row(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Expanded(
-                  child: TextField(
-                    controller: queryCtrl,
-                    onChanged: onQueryChanged,
-                    style: const TextStyle(color: Colors.white),
-                    decoration: InputDecoration(
-                      hintText: 'Buscar por titulo, descripcion o tag...',
-                      hintStyle: const TextStyle(color: Colors.white60),
-                      prefixIcon:
-                          const Icon(Icons.search, color: Colors.white70),
-                      filled: true,
-                      fillColor: Colors.white.withValues(alpha: 0.15),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide.none,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 0,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                FilledButton.icon(
-                  onPressed: onToggleFilters,
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.white.withValues(alpha: 0.15),
-                    foregroundColor: Colors.white,
-                  ),
-                  icon: Icon(
-                    showFilters ? Icons.tune : Icons.tune,
-                    size: 18,
-                  ),
-                  label: const Text('Filtros'),
-                ),
+                Icon(icon, size: 14),
+                const SizedBox(width: 4),
+                Text(label),
               ],
             ),
-          ],
-        ),
+            selected: isSel,
+            showCheckmark: false,
+            onSelected: (_) => onChanged(value),
+          );
+        },
       ),
     );
   }
 }
 
+// ============================================================
+// Panel de filtros avanzados (colapsable)
 // ============================================================
 class _FiltersPanel extends ConsumerWidget {
   const _FiltersPanel({required this.filters});
@@ -228,7 +230,7 @@ class _FiltersPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tagsAsync = ref.watch(tagCatalogProvider);
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -377,52 +379,6 @@ class _FilterColumn extends StatelessWidget {
           );
         }),
       ],
-    );
-  }
-}
-
-// ============================================================
-// Chips horizontales: Todo / Asesorias / Proyectos / Recomendados
-// ============================================================
-class _ScopeChips extends StatelessWidget {
-  const _ScopeChips({required this.scope, required this.onChanged});
-  final SearchScope scope;
-  final ValueChanged<SearchScope> onChanged;
-
-  static const _items = <(SearchScope, String, IconData)>[
-    (SearchScope.todo, 'Todo', Icons.apps),
-    (SearchScope.asesorias, 'Asesorias', Icons.menu_book_outlined),
-    (SearchScope.proyectos, 'Proyectos', Icons.rocket_launch_outlined),
-    (SearchScope.recomendados, 'Recomendados', Icons.auto_awesome),
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 48,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-        itemCount: _items.length,
-        separatorBuilder: (c, i) => const SizedBox(width: 8),
-        itemBuilder: (context, i) {
-          final (value, label, icon) = _items[i];
-          final isSel = scope == value;
-          return ChoiceChip(
-            label: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icon, size: 14),
-                const SizedBox(width: 4),
-                Text(label),
-              ],
-            ),
-            selected: isSel,
-            showCheckmark: false,
-            onSelected: (_) => onChanged(value),
-          );
-        },
-      ),
     );
   }
 }

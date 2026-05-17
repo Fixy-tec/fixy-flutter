@@ -5,6 +5,7 @@ import '../../core/theme/app_colors.dart';
 import '../models/request_summary.dart';
 import 'medal_badge.dart';
 import 'tag_chip.dart';
+import 'user_avatar.dart';
 
 class RequestCard extends StatelessWidget {
   const RequestCard({required this.request, this.onTap, super.key});
@@ -100,26 +101,13 @@ class _CreatorRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final initials = request.creator.fullName
-        .split(' ')
-        .where((p) => p.isNotEmpty)
-        .take(2)
-        .map((p) => p[0].toUpperCase())
-        .join();
 
     return Row(
       children: [
-        CircleAvatar(
+        UserAvatar(
+          fullName: request.creator.fullName,
+          avatarSlug: request.creator.avatarSlug,
           radius: 14,
-          backgroundColor: theme.colorScheme.primaryContainer,
-          child: Text(
-            initials,
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w700,
-              color: theme.colorScheme.onPrimaryContainer,
-            ),
-          ),
         ),
         const SizedBox(width: 8),
         Flexible(

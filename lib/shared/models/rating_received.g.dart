@@ -11,6 +11,7 @@ _RatingReceived _$RatingReceivedFromJson(Map<String, dynamic> json) =>
       id: json['id'] as String,
       raterId: json['rater_id'] as String,
       raterFullName: json['rater_full_name'] as String,
+      raterAvatarSlug: json['rater_avatar_slug'] as String?,
       raterMedal:
           $enumDecodeNullable(_$MedalEnumMap, json['rater_medal']) ??
           Medal.hierro,
@@ -24,6 +25,7 @@ Map<String, dynamic> _$RatingReceivedToJson(_RatingReceived instance) =>
       'id': instance.id,
       'rater_id': instance.raterId,
       'rater_full_name': instance.raterFullName,
+      'rater_avatar_slug': instance.raterAvatarSlug,
       'rater_medal': _$MedalEnumMap[instance.raterMedal]!,
       'stars': instance.stars,
       'comment': instance.comment,

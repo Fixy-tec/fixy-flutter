@@ -17,6 +17,7 @@ abstract class RequestCreator with _$RequestCreator {
     required String id,
     required String fullName,
     String? avatarUrl,
+    String? avatarSlug,
     @Default(Medal.hierro) Medal medal,
     String? whatsappNumber,
   }) = _RequestCreator;

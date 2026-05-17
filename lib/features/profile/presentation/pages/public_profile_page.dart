@@ -266,29 +266,16 @@ class _RatingTile extends StatelessWidget {
   final RatingReceived rating;
   @override
   Widget build(BuildContext context) {
-    final initials = rating.raterFullName
-        .split(' ')
-        .where((p) => p.isNotEmpty)
-        .take(2)
-        .map((p) => p[0].toUpperCase())
-        .join();
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(14),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CircleAvatar(
+            UserAvatar(
+              fullName: rating.raterFullName,
+              avatarSlug: rating.raterAvatarSlug,
               radius: 16,
-              backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-              child: Text(
-                initials,
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w700,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                ),
-              ),
             ),
             const SizedBox(width: 10),
             Expanded(

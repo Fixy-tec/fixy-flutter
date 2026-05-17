@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../shared/models/applicant_info.dart';
 import '../../../../shared/models/application_summary.dart';
 import '../../../../shared/widgets/medal_badge.dart';
+import '../../../../shared/widgets/user_avatar.dart';
 import '../../../requests/presentation/widgets/status_chip.dart';
 
 class ApplicantCard extends StatelessWidget {
@@ -22,12 +23,6 @@ class ApplicantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initials = applicant.fullName
-        .split(' ')
-        .where((p) => p.isNotEmpty)
-        .take(2)
-        .map((p) => p[0].toUpperCase())
-        .join();
     final isPending = applicant.status == ApplicationStatus.pendiente;
 
     return Card(
@@ -41,15 +36,10 @@ class ApplicantCard extends StatelessWidget {
           children: [
             Row(
               children: [
-                CircleAvatar(
+                UserAvatar(
+                  fullName: applicant.fullName,
+                  avatarSlug: applicant.avatarSlug,
                   radius: 18,
-                  child: Text(
-                    initials,
-                    style: const TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(

@@ -11,6 +11,7 @@ abstract class RatingReceived with _$RatingReceived {
     required String id,
     required String raterId,
     required String raterFullName,
+    String? raterAvatarSlug,
     @Default(Medal.hierro) Medal raterMedal,
     required int stars,
     String? comment,

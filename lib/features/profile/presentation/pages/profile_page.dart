@@ -505,7 +505,11 @@ class _RatingTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          UserAvatar(fullName: rating.raterFullName, radius: 16),
+          UserAvatar(
+            fullName: rating.raterFullName,
+            avatarSlug: rating.raterAvatarSlug,
+            radius: 16,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Column(

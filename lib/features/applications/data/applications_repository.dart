@@ -46,7 +46,7 @@ class ApplicationsRepository {
         .select('''
           id, applicant_id, message, status, applied_at,
           applicant:profiles!applications_applicant_id_fkey (
-            id, full_name, avatar_url, medal, avg_rating, ratings_count,
+            id, full_name, avatar_url, avatar_slug, medal, avg_rating, ratings_count,
             total_points, whatsapp_number
           )
         ''')
@@ -60,6 +60,7 @@ class ApplicationsRepository {
         applicantId: ap['id'] as String,
         fullName: ap['full_name'] as String,
         avatarUrl: ap['avatar_url'] as String?,
+        avatarSlug: ap['avatar_slug'] as String?,
         medal: Medal.values.firstWhere(
           (m) => m.name == (ap['medal'] as String? ?? 'hierro'),
           orElse: () => Medal.hierro,
@@ -89,7 +90,7 @@ class ApplicationsRepository {
         .select('''
           id, applicant_id, message, status, applied_at,
           applicant:profiles!applications_applicant_id_fkey (
-            id, full_name, avatar_url, medal, avg_rating, ratings_count,
+            id, full_name, avatar_url, avatar_slug, medal, avg_rating, ratings_count,
             total_points, whatsapp_number
           )
         ''')

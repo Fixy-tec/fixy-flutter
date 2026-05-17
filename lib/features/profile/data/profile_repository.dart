@@ -67,7 +67,7 @@ class ProfileRepository {
         .from('ratings')
         .select('''
           id, stars, comment, created_at,
-          rater:profiles!ratings_rater_id_fkey ( id, full_name, medal )
+          rater:profiles!ratings_rater_id_fkey ( id, full_name, medal, avatar_slug )
         ''')
         .eq('rated_id', userId)
         .order('created_at', ascending: false)
@@ -79,6 +79,7 @@ class ProfileRepository {
         id: row['id'] as String,
         raterId: r['id'] as String,
         raterFullName: r['full_name'] as String,
+        raterAvatarSlug: r['avatar_slug'] as String?,
         raterMedal: Medal.values.firstWhere(
           (m) => m.name == (r['medal'] as String? ?? 'hierro'),
           orElse: () => Medal.hierro,

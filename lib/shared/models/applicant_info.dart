@@ -14,6 +14,7 @@ abstract class ApplicantInfo with _$ApplicantInfo {
     required String applicantId,
     required String fullName,
     String? avatarUrl,
+    String? avatarSlug,
     @Default(Medal.hierro) Medal medal,
     @Default(0) num avgRating,
     @Default(0) int ratingsCount,

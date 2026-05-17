@@ -34,7 +34,7 @@ class RequestsRepository {
   static const _selectQuery = '''
     id, type, title, description, difficulty_level, base_points,
     economic_benefit, participants_needed, status, deadline, published_at,
-    creator:profiles!requests_creator_id_fkey ( id, full_name, avatar_url, medal, whatsapp_number ),
+    creator:profiles!requests_creator_id_fkey ( id, full_name, avatar_url, avatar_slug, medal, whatsapp_number ),
     request_tags ( tag:tags ( id, name, slug, is_custom ) ),
     applications ( count )
   ''';
@@ -243,6 +243,7 @@ class RequestsRepository {
         id: creatorJson['id'] as String,
         fullName: creatorJson['full_name'] as String,
         avatarUrl: creatorJson['avatar_url'] as String?,
+        avatarSlug: creatorJson['avatar_slug'] as String?,
         medal: _parseMedal(creatorJson['medal'] as String? ?? 'hierro'),
         whatsappNumber: creatorJson['whatsapp_number'] as String?,
       ),

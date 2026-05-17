@@ -3,6 +3,30 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.1.4] - 2026-05-16
+
+### Added
+- **Avatares Fixo en TODAS las cards y listas** donde antes salian iniciales:
+  - RequestCard del feed/buscar (creador)
+  - ApplicantCard (postulante)
+  - RatingTile del perfil propio y publico (calificador)
+- Para que esto funcione, los modelos `RequestCreator`, `ApplicantInfo` y
+  `RatingReceived` ganaron campo `avatarSlug`, y los repositories ahora
+  hacen SELECT de `avatar_slug` en sus joins.
+
+### Fixed
+- **SearchPage tenia header gradient inconsistente** con el resto de tabs
+  (Solicitudes, Ranking, Perfil usan AppBar normal). Cambiado a AppBar
+  estandar con titulo "Buscar".
+- **El TextField del buscador no se veia ni funcionaba**: estaba dentro
+  del header gradient con `vertical: 0` padding y colores blancos que se
+  perdian. Ahora vive en el body con estilo M3 normal, prefijo lupita y
+  boton X para limpiar.
+- **Ranking tenia AppBar "Ranking" + header gradient "Ranking"** duplicado.
+  Removido el gradient, ahora solo el AppBar como las demas tabs.
+- Boton "Filtros" ahora es un `IconButton.filledTonal` consistente con la
+  campana del Dashboard.
+
 ## [1.1.3] - 2026-05-16
 
 ### Fixed

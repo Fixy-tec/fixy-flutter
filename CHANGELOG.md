@@ -3,6 +3,61 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.1.0] - 2026-05-04
+
+Rediseno completo de UX alineado al prototipo web del equipo, manteniendo
+el stack mobile (Flutter + Supabase). 5 tabs en lugar de 4: Inicio,
+Solicitudes, Buscar, Ranking, Perfil.
+
+### Added
+- **Registro multi-step (5 pasos)**: cuenta basica → tags → avatar → about → links.
+  Solo el primer paso es obligatorio; los demas pueden saltarse y completarse
+  desde el perfil. Indicador de progreso visual arriba.
+- **6 avatares Fixo** (artista, cyborg, hacker, karateka, emprendedor, pirata)
+  como PNGs en `assets/avatars/`. Elegibles en registro y editor de perfil.
+- **Crear solicitud multi-step (3 pasos)**: tipo → detalles → condiciones+resumen.
+  Cards visuales para tipo, slider con preview en vivo de puntos por dificultad,
+  card de resumen al final.
+- **7 medallas PNG** (`assets/medals/`) reemplazan el icono escudo generico
+  en MedalImage. Usadas en perfil, ranking y top users.
+- **Dashboard de Inicio nuevo**: header con logo + campana, welcome card con
+  gradiente brand y CTAs Explorar/Crear, card de novedades, actividad reciente
+  (ultimas 4 notificaciones), card de comunidad.
+- **Tab Buscar dedicada**: header gradient, search bar, filtros expandibles
+  (Tipo / Compensacion / Dificultad / Tags), contador de resultados, mismas
+  cards que el feed.
+- **Perfil rediseñado**: hero con avatar grande + 4 stats compactos (Puntos /
+  Ranking / Rating / Completadas) + barra de progreso a la siguiente medalla,
+  todo en un solo card. Secciones Sobre mi / Tecnologias / Contacto / Links /
+  Ultimas calificaciones, cada una con header en mayusculas estilo etiqueta.
+- **Ranking rediseñado**: header gradient, card "Tu rango actual" con medalla
+  grande circular y progress overlay, row horizontal con todas las medallas
+  ("Tu aqui" en la tuya), filtro horizontal por medalla, top users con icono
+  de podio para los 3 primeros + medalla PNG en lugar de chip.
+- **Public profile**: usa avatar PNG si el usuario lo eligio, MedalImage,
+  link de GitHub si existe.
+
+### Changed
+- **Inicio anterior (Feed con filtros)** reemplazado por SearchPage en la
+  tab "Buscar"; la tab "Inicio" muestra ahora el Dashboard.
+- **Bottom navigation** pasa de 4 a 5 tabs (agrega "Buscar").
+- **Editor de perfil** incluye selector de avatar horizontal + campo GitHub.
+- **AuthRepository.signUp** acepta avatar, bio, github, linkedin, portfolio,
+  tags — todos opcionales.
+
+### Database
+- **Migracion 08_avatar.sql**: agrega columnas `avatar_slug` (con check de
+  los 6 valores validos) y `github_url` a `profiles`. Idempotente.
+- `01_schema.sql` actualizado para que las instalaciones nuevas tengan ambas
+  columnas desde el inicio.
+
+### Technical
+- Nuevos widgets reusables: `UserAvatar` (con fallback a iniciales) y
+  `MedalImage`.
+- Nuevo provider `searchFiltersProvider` y `searchResultsProvider` con
+  filtrado en cliente.
+- Catalogo de avatares en `lib/core/constants/avatars.dart`.
+
 ## [1.0.1] - 2026-05-01
 
 ### Fixed

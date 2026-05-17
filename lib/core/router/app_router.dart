@@ -6,17 +6,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import '../../features/applications/presentation/pages/request_detail_page.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
-import '../../features/applications/presentation/pages/request_detail_page.dart';
-import '../../features/feed/presentation/pages/feed_page.dart';
+import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/profile/presentation/pages/public_profile_page.dart';
 import '../../features/ranking/presentation/pages/ranking_page.dart';
 import '../../features/requests/presentation/pages/create_request_page.dart';
 import '../../features/requests/presentation/pages/my_requests_page.dart';
+import '../../features/search/presentation/pages/search_page.dart';
 import '../supabase/supabase_client.dart';
 import 'app_shell.dart';
 
@@ -44,7 +45,7 @@ final routerProvider = Provider<GoRouter>((ref) {
 
   return GoRouter(
     navigatorKey: _rootKey,
-    initialLocation: '/feed',
+    initialLocation: '/home',
     refreshListenable: refresh,
     redirect: (context, state) {
       final loggedIn = supabase.auth.currentSession != null;
@@ -52,7 +53,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       final isAuthRoute = loc == '/login' || loc == '/register';
 
       if (!loggedIn && !isAuthRoute) return '/login';
-      if (loggedIn && isAuthRoute) return '/feed';
+      if (loggedIn && isAuthRoute) return '/home';
       return null;
     },
     debugLogDiagnostics: kDebugMode,
@@ -93,8 +94,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           StatefulShellBranch(
             routes: [
               GoRoute(
-                path: '/feed',
-                builder: (context, state) => const FeedPage(),
+                path: '/home',
+                builder: (context, state) => const DashboardPage(),
               ),
             ],
           ),
@@ -103,6 +104,14 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: '/requests',
                 builder: (context, state) => const MyRequestsPage(),
+              ),
+            ],
+          ),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: '/search',
+                builder: (context, state) => const SearchPage(),
               ),
             ],
           ),

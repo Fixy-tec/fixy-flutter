@@ -10,24 +10,30 @@ class ProfileUpdateData {
     this.career,
     this.cycle,
     this.bio,
+    this.avatarSlug,
     this.portfolioUrl,
     this.linkedinUrl,
+    this.githubUrl,
   });
 
   final String? fullName;
   final String? career;
   final int? cycle;
   final String? bio;
+  final String? avatarSlug;
   final String? portfolioUrl;
   final String? linkedinUrl;
+  final String? githubUrl;
 
   Map<String, dynamic> toJson() => {
         if (fullName != null) 'full_name': fullName,
         if (career != null) 'career': career,
         if (cycle != null) 'cycle': cycle,
         if (bio != null) 'bio': bio,
+        if (avatarSlug != null) 'avatar_slug': avatarSlug,
         if (portfolioUrl != null) 'portfolio_url': portfolioUrl,
         if (linkedinUrl != null) 'linkedin_url': linkedinUrl,
+        if (githubUrl != null) 'github_url': githubUrl,
       };
 }
 
@@ -45,8 +51,9 @@ class ProfileRepository {
     final row = await _client
         .from('profiles')
         .select(
-          'id, full_name, career, cycle, bio, avatar_url, total_points, '
-          'medal, avg_rating, ratings_count, portfolio_url, linkedin_url',
+          'id, full_name, career, cycle, bio, avatar_url, avatar_slug, '
+          'total_points, medal, avg_rating, ratings_count, '
+          'portfolio_url, linkedin_url, github_url',
         )
         .eq('id', userId)
         .maybeSingle();

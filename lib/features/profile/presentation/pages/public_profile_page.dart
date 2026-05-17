@@ -6,8 +6,9 @@ import '../../../../core/constants/reputation.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../../../shared/models/rating_received.dart';
 import '../../../../shared/widgets/empty_state.dart';
-import '../../../../shared/widgets/medal_badge.dart';
+import '../../../../shared/widgets/medal_image.dart';
 import '../../../../shared/widgets/tag_chip.dart';
+import '../../../../shared/widgets/user_avatar.dart';
 import '../providers/profile_providers.dart';
 
 /// Perfil publico de otro usuario. Read-only.
@@ -38,12 +39,7 @@ class PublicProfilePage extends ConsumerWidget {
           }
 
           final fullName = profile['full_name'] as String;
-          final initials = fullName
-              .split(' ')
-              .where((p) => p.isNotEmpty)
-              .take(2)
-              .map((p) => p[0].toUpperCase())
-              .join();
+          final avatarSlug = profile['avatar_slug'] as String?;
           final medal = Medal.values.firstWhere(
             (m) => m.name == (profile['medal'] as String? ?? 'hierro'),
             orElse: () => Medal.hierro,
@@ -56,6 +52,7 @@ class PublicProfilePage extends ConsumerWidget {
           final bio = profile['bio'] as String?;
           final portfolio = profile['portfolio_url'] as String?;
           final linkedin = profile['linkedin_url'] as String?;
+          final github = profile['github_url'] as String?;
 
           return RefreshIndicator(
             onRefresh: () async {
@@ -68,19 +65,10 @@ class PublicProfilePage extends ConsumerWidget {
               padding: const EdgeInsets.all(20),
               children: [
                 Center(
-                  child: CircleAvatar(
+                  child: UserAvatar(
+                    fullName: fullName,
+                    avatarSlug: avatarSlug,
                     radius: 48,
-                    backgroundColor:
-                        Theme.of(context).colorScheme.primaryContainer,
-                    child: Text(
-                      initials,
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.w700,
-                        color:
-                            Theme.of(context).colorScheme.onPrimaryContainer,
-                      ),
-                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -100,7 +88,7 @@ class PublicProfilePage extends ConsumerWidget {
                       ),
                 ),
                 const SizedBox(height: 16),
-                Center(child: MedalBadge(medal: medal)),
+                Center(child: MedalImage(medal: medal, size: 64)),
                 const SizedBox(height: 16),
                 Card(
                   child: Padding(
@@ -155,11 +143,18 @@ class PublicProfilePage extends ConsumerWidget {
                     );
                   },
                 ),
-                if (portfolio != null && portfolio.isNotEmpty ||
-                    linkedin != null && linkedin.isNotEmpty) ...[
+                if ((portfolio != null && portfolio.isNotEmpty) ||
+                    (linkedin != null && linkedin.isNotEmpty) ||
+                    (github != null && github.isNotEmpty)) ...[
                   const SizedBox(height: 24),
                   _SectionHeader(title: 'Enlaces'),
                   const SizedBox(height: 8),
+                  if (github != null && github.isNotEmpty)
+                    _LinkTile(
+                      icon: Icons.code,
+                      label: github,
+                      url: github,
+                    ),
                   if (portfolio != null && portfolio.isNotEmpty)
                     _LinkTile(
                       icon: Icons.public,

@@ -35,9 +35,11 @@ create table public.profiles (
   cycle           int check (cycle between 1 and 10),
   bio             text,
   avatar_url      text,
+  avatar_slug     text check (avatar_slug in ('arte','cyborg','hacker','karate','money','pirata')),
   whatsapp_number text,                          -- visible solo cuando se aprueba postulacion
   portfolio_url   text,
   linkedin_url    text,
+  github_url      text,
   total_points    int not null default 0,
   medal           medal_tier not null default 'hierro',
   avg_rating      numeric(3,2) not null default 0,

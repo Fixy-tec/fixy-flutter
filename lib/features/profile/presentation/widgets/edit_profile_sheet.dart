@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/constants/avatars.dart';
 import '../../../../core/utils/auth_error_messages.dart';
 import '../../../auth/domain/app_user.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -36,6 +37,8 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
   late final TextEditingController _bio;
   late final TextEditingController _portfolio;
   late final TextEditingController _linkedin;
+  late final TextEditingController _github;
+  String? _avatarSlug;
   bool _saving = false;
 
   @override
@@ -47,6 +50,8 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
     _bio = TextEditingController(text: widget.user.bio ?? '');
     _portfolio = TextEditingController(text: widget.user.portfolioUrl ?? '');
     _linkedin = TextEditingController(text: widget.user.linkedinUrl ?? '');
+    _github = TextEditingController(text: widget.user.githubUrl ?? '');
+    _avatarSlug = widget.user.avatarSlug;
   }
 
   @override
@@ -57,6 +62,7 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
     _bio.dispose();
     _portfolio.dispose();
     _linkedin.dispose();
+    _github.dispose();
     super.dispose();
   }
 
@@ -80,10 +86,15 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
               career: _career.text.trim(),
               cycle: cycle,
               bio: _bio.text.trim().isEmpty ? null : _bio.text.trim(),
-              portfolioUrl:
-                  _portfolio.text.trim().isEmpty ? null : _portfolio.text.trim(),
-              linkedinUrl:
-                  _linkedin.text.trim().isEmpty ? null : _linkedin.text.trim(),
+              avatarSlug: _avatarSlug,
+              portfolioUrl: _portfolio.text.trim().isEmpty
+                  ? null
+                  : _portfolio.text.trim(),
+              linkedinUrl: _linkedin.text.trim().isEmpty
+                  ? null
+                  : _linkedin.text.trim(),
+              githubUrl:
+                  _github.text.trim().isEmpty ? null : _github.text.trim(),
             ),
           );
       ref.invalidate(currentUserProvider);
@@ -112,6 +123,43 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
               style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.w700,
                   ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              'Avatar',
+              style: TextStyle(fontWeight: FontWeight.w700),
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              height: 80,
+              child: ListView.separated(
+                scrollDirection: Axis.horizontal,
+                itemCount: avatarChoices.length,
+                separatorBuilder: (c, i) => const SizedBox(width: 8),
+                itemBuilder: (context, i) {
+                  final a = avatarChoices[i];
+                  final sel = _avatarSlug == a.slug;
+                  return InkWell(
+                    onTap: () =>
+                        setState(() => _avatarSlug = sel ? null : a.slug),
+                    borderRadius: BorderRadius.circular(40),
+                    child: Container(
+                      width: 80,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: sel
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.outlineVariant,
+                          width: sel ? 2.5 : 1,
+                        ),
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      padding: const EdgeInsets.all(4),
+                      child: Image.asset(a.assetPath, fit: BoxFit.contain),
+                    ),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: 16),
             TextField(
@@ -156,11 +204,11 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
             ),
             const SizedBox(height: 4),
             TextField(
-              controller: _portfolio,
+              controller: _github,
               keyboardType: TextInputType.url,
               decoration: const InputDecoration(
-                labelText: 'Portafolio (URL, opcional)',
-                prefixIcon: Icon(Icons.public),
+                labelText: 'GitHub (URL, opcional)',
+                prefixIcon: Icon(Icons.code),
               ),
             ),
             const SizedBox(height: 12),
@@ -169,7 +217,16 @@ class _EditProfileSheetState extends ConsumerState<EditProfileSheet> {
               keyboardType: TextInputType.url,
               decoration: const InputDecoration(
                 labelText: 'LinkedIn (URL, opcional)',
-                prefixIcon: Icon(Icons.work_outline),
+                prefixIcon: Icon(Icons.business_center_outlined),
+              ),
+            ),
+            const SizedBox(height: 12),
+            TextField(
+              controller: _portfolio,
+              keyboardType: TextInputType.url,
+              decoration: const InputDecoration(
+                labelText: 'Portafolio (URL, opcional)',
+                prefixIcon: Icon(Icons.public),
               ),
             ),
             const SizedBox(height: 20),

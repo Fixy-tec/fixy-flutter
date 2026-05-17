@@ -2,21 +2,36 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../domain/app_user.dart';
 
-/// Datos requeridos para registro segun RF-U01.
+/// Datos del registro (4 pasos). career/cycle/avatar/tags/etc son opcionales
+/// porque el usuario puede skip varios pasos.
 class SignUpData {
   const SignUpData({
     required this.email,
     required this.password,
-    required this.fullName,
-    required this.career,
-    required this.cycle,
+    this.fullName,
+    this.career,
+    this.cycle,
+    this.avatarSlug,
+    this.whatsappNumber,
+    this.bio,
+    this.githubUrl,
+    this.linkedinUrl,
+    this.portfolioUrl,
+    this.tagIds = const [],
   });
 
   final String email;
   final String password;
-  final String fullName;
-  final String career;
-  final int cycle;
+  final String? fullName;
+  final String? career;
+  final int? cycle;
+  final String? avatarSlug;
+  final String? whatsappNumber;
+  final String? bio;
+  final String? githubUrl;
+  final String? linkedinUrl;
+  final String? portfolioUrl;
+  final List<String> tagIds;
 }
 
 class AuthRepository {
@@ -39,7 +54,7 @@ class AuthRepository {
     final response = await _auth.signUp(
       email: data.email,
       password: data.password,
-      data: {'full_name': data.fullName},
+      data: {if (data.fullName != null) 'full_name': data.fullName},
     );
 
     final user = response.user;
@@ -48,11 +63,29 @@ class AuthRepository {
     }
 
     // El trigger handle_new_auth_user creo la fila base en profiles.
-    // Completamos los campos de carrera y ciclo.
-    await _client.from('profiles').update({
-      'career': data.career,
-      'cycle': data.cycle,
-    }).eq('id', user.id);
+    // Completamos los datos opcionales del onboarding.
+    final updates = <String, dynamic>{
+      if (data.career != null) 'career': data.career,
+      if (data.cycle != null) 'cycle': data.cycle,
+      if (data.avatarSlug != null) 'avatar_slug': data.avatarSlug,
+      if (data.whatsappNumber != null) 'whatsapp_number': data.whatsappNumber,
+      if (data.bio != null) 'bio': data.bio,
+      if (data.portfolioUrl != null) 'portfolio_url': data.portfolioUrl,
+      if (data.linkedinUrl != null) 'linkedin_url': data.linkedinUrl,
+      if (data.githubUrl != null) 'github_url': data.githubUrl,
+    };
+    if (updates.isNotEmpty) {
+      await _client.from('profiles').update(updates).eq('id', user.id);
+    }
+
+    // Tags seleccionados
+    if (data.tagIds.isNotEmpty) {
+      await _client.from('user_tags').insert(
+            data.tagIds
+                .map((tagId) => {'user_id': user.id, 'tag_id': tagId})
+                .toList(),
+          );
+    }
   }
 
   Future<void> signOut() => _auth.signOut();

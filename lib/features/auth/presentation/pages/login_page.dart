@@ -62,15 +62,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 24),
                     Image.asset(
                       'assets/logo.png',
-                      height: 140,
+                      height: 120,
                       fit: BoxFit.contain,
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Asesorias y proyectos para Tecsup',
+                      'Bienvenido de vuelta',
+                      textAlign: TextAlign.center,
+                      style: theme.textTheme.titleLarge?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      'Ingresa tus datos para continuar',
                       textAlign: TextAlign.center,
                       style: theme.textTheme.bodyMedium?.copyWith(
                         color: theme.colorScheme.onSurfaceVariant,

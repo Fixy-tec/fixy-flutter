@@ -11,6 +11,7 @@ import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/auth/presentation/providers/auth_providers.dart';
 import '../../features/dashboard/presentation/pages/dashboard_page.dart';
+import '../../features/error/presentation/pages/not_found_page.dart';
 import '../../features/notifications/presentation/pages/notifications_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/profile/presentation/pages/public_profile_page.dart';
@@ -57,6 +58,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       return null;
     },
     debugLogDiagnostics: kDebugMode,
+    errorBuilder: (context, state) => NotFoundPage(location: state.uri.path),
     routes: [
       GoRoute(
         path: '/login',

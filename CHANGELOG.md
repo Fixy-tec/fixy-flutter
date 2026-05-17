@@ -3,6 +3,39 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.1.5] - 2026-05-17
+
+Iteracion alineada a los requisitos de la Entrega 25% del curso. Agrega
+calidad de codigo verificable: vista 404, pruebas unitarias automatizadas
+y herramienta de stress test para el backend.
+
+### Added
+- **Vista 404 (NotFoundPage)**: se renderiza automaticamente cuando el
+  usuario navega a una ruta inexistente o cuando un deep-link no coincide
+  con ninguna ruta registrada. Muestra la ruta intentada y un boton para
+  volver al inicio. Conectada via errorBuilder del go_router.
+- **41 pruebas unitarias** en 4 archivos:
+  - test/core/utils/validators_test.dart (15 tests) — valida email Tecsup,
+    contrasena minima, campos requeridos.
+  - test/core/constants/reputation_test.dart (12 tests) — verifica la
+    asignacion de medallas por rango de puntos, valores de basePointsByLevel
+    y consistencia del medalLadder.
+  - test/core/update/update_info_test.dart (9 tests) — comparacion semver
+    con prefijo 'v', sufijos +N y -beta, y versiones de distinta longitud.
+  - test/core/utils/time_ago_test.dart (8 tests) — formato relativo en
+    espanol desde 'hace un momento' hasta 'hace N anios'.
+  - Comando: flutter test. Resultado: 41/41 passed.
+- **Stress test script** en tool/stress_test.dart (Dart puro, package:http)
+  que ejecuta N peticiones concurrentes contra 3 escenarios reales del
+  backend Supabase: catalogo de tags, feed con joins anidados y top de
+  ranking. Imprime media, p50, p95 y p99 por escenario.
+  - Resultado con N=100 (300 requests totales): 100% exito, latencia media
+    del feed de 438 ms (p95 < 600 ms).
+  - Resultados completos en docs/STRESS_TEST_RESULTS.md.
+
+### Dependencies
+- Anadido http ^1.2.2 como dev_dependency (usado solo por tool/stress_test.dart).
+
 ## [1.1.4] - 2026-05-16
 
 ### Added

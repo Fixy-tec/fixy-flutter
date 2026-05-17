@@ -11,6 +11,13 @@ android/app/upload-keystore.jks
 .claude/settings.local.json
 CLAUDE.md
 
+# Working assets / source images (NO commitear — los finales viven en assets/)
+FixyImages/
+docs/*.png
+docs/*.pptx
+docs/avatars/
+docs/medals/
+
 # Miscellaneous
 *.class
 *.log

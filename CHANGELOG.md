@@ -3,6 +3,23 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.1.1] - 2026-05-16
+
+### Fixed
+- **Auto-updater quedaba en pantalla negra al descargar**: el AlertDialog con
+  ValueListenableBuilder no se renderizaba sobre algunos devices y, ademas, si
+  `OpenFilex.open()` fallaba la excepcion se ignoraba silenciosamente.
+- Reemplazado el dialog por una **pantalla full-screen dedicada** con titulo,
+  icono grande, barra de progreso visible (10 px) y texto del porcentaje.
+- **Descarga ahora va a directorio externo** (`getExternalStorageDirectory`)
+  en vez de cache interno, asi el instalador de Android puede abrir el APK
+  sin requerir FileProvider extra.
+- `OpenFilex.open()` ahora **tira excepcion explicita** si falla, mostrando
+  al usuario la ruta del archivo y un mensaje claro pidiendo activar "Instalar
+  apps desconocidas" en Ajustes.
+- Pagina de descarga tiene boton **Reintentar** si la descarga o el instalador
+  fallan.
+
 ## [1.1.0] - 2026-05-04
 
 Rediseno completo de UX alineado al prototipo web del equipo, manteniendo

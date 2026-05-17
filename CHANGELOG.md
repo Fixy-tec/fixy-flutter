@@ -3,6 +3,17 @@
 Todos los cambios notables a este proyecto se documentan aquí.
 Sigue el formato de [Keep a Changelog](https://keepachangelog.com/es/1.1.0/).
 
+## [1.1.3] - 2026-05-16
+
+### Fixed
+- **UpdateBanner no aparecia en el Dashboard**: cuando rediseñamos el Inicio
+  en v1.1.0 (DashboardPage en vez del feed antiguo), se olvido mover el
+  banner al nuevo widget. Ahora el banner se renderiza justo debajo del
+  header del Dashboard, asi que las actualizaciones futuras se detectan
+  apenas se abre la app.
+- Ajustado padding del banner para que se integre bien tanto en el ListView
+  con padding de Dashboard como en el SliverList del Feed legacy.
+
 ## [1.1.2] - 2026-05-16
 
 ### Fixed

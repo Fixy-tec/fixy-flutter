@@ -17,7 +17,7 @@ class UpdateBanner extends ConsumerWidget {
     if (info == null) return const SizedBox.shrink();
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+      padding: const EdgeInsets.only(top: 8),
       child: Material(
         color: AppColors.primary,
         borderRadius: BorderRadius.circular(12),

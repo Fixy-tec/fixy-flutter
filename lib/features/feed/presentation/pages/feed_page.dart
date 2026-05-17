@@ -29,7 +29,12 @@ class FeedPage extends ConsumerWidget {
               SliverToBoxAdapter(
                 child: _Header(greetingName: userAsync.value?.fullName),
               ),
-              const SliverToBoxAdapter(child: UpdateBanner()),
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16),
+                  child: UpdateBanner(),
+                ),
+              ),
               SliverPersistentHeader(
                 pinned: true,
                 delegate: _FilterBarDelegate(

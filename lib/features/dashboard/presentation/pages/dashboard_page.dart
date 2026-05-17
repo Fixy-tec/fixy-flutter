@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/theme/app_colors.dart';
+import '../../../../core/update/update_banner.dart';
 import '../../../../core/utils/time_ago.dart';
 import '../../../../shared/models/app_notification.dart';
 import '../../../auth/presentation/providers/auth_providers.dart';
@@ -39,6 +40,7 @@ class DashboardPage extends ConsumerWidget {
             children: [
               // Header con campana
               _DashboardHeader(),
+              const UpdateBanner(),
               const SizedBox(height: 12),
               _WelcomeCard(
                 firstName: firstName,
